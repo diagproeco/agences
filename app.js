@@ -130,14 +130,18 @@
     function chercher(q) {
       if (ctrl) ctrl.abort();
       ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
-      var url = 'https://data.geopf.fr/geocodage/search?autocomplete=1&limit=6&lat=46.29&lon=5.16&q=' + encodeURIComponent(q);
+      // 20 résultats, puis ceux du secteur (Ain d'abord) remontés en tête
+      var url = 'https://data.geopf.fr/geocodage/search?autocomplete=1&limit=20&lat=46.29&lon=5.16&q=' + encodeURIComponent(q);
+      var BONUS = { '01': 0.2, '71': 0.1, '39': 0.1, '69': 0.08 };
       fetch(url, ctrl ? { signal: ctrl.signal } : {})
         .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
         .then(function (j) {
-          items = (j.features || []).map(function (f) {
+          items = (j.features || []).map(function (f, i) {
             var p = f.properties || {}, c = (f.geometry && f.geometry.coordinates) || [];
-            return { label: p.label, name: p.name, postcode: p.postcode, city: p.city, citycode: p.citycode, context: p.context, type: p.type, lon: c[0], lat: c[1] };
-          });
+            var dep = String(p.context || '').split(',')[0].trim();
+            return { label: p.label, name: p.name, postcode: p.postcode, city: p.city, citycode: p.citycode, context: p.context, type: p.type, lon: c[0], lat: c[1],
+              rang: (typeof p.score === 'number' ? p.score : 1 - i / 40) + (BONUS[dep] || 0) };
+          }).sort(function (a, b) { return b.rang - a.rang; }).slice(0, 6);
           afficher();
         })
         .catch(function (err) {
