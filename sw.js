@@ -1,5 +1,5 @@
 /* Diag Pro Eco - appli agences : fonctionne aussi sans réseau (sauf l'envoi, mis en attente) */
-var CACHE = 'agences-v5';
+var CACHE = 'agences-v6';
 var FICHIERS = ['./', './index.html', './regles.js', './app.js', './manifest.webmanifest', './logo-96.png', './icon-180.png', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', function (e) {

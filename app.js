@@ -7,7 +7,7 @@
     cle: 'dpe-agences-2026',
     delaiDevis: 'dans la journée'
   };
-  var VERSION = '1.2';
+  var VERSION = '1.3';
   var R = window.Regles;
 
   /* ---------- outils ---------- */
@@ -512,7 +512,7 @@
   function champsBrouillon() {
     var o = {};
     $$('input, textarea', form).forEach(function (el) {
-      if (!el.name || ['site', 'agence', 'contact', 'email', 'tel'].indexOf(el.name) !== -1) return;
+      if (!el.name || el.name === 'site') return;   // tout est gardé (coordonnées de l'agence comprises), sauf le piège à robots
       if (el.type === 'radio') { if (el.checked) o[el.name] = el.value; }
       else if (el.type !== 'checkbox') o[el.name] = el.value;
     });
