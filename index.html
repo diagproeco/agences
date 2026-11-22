@@ -154,6 +154,10 @@ details summary{cursor:pointer;font-weight:700;color:var(--lime-ink);min-height:
 .recap ul{margin:6px 0 0;padding-left:20px}
 .acts-col{display:flex;flex-direction:column;gap:10px;margin:16px 0}
 .install{margin-top:8px;font-size:14px;color:var(--ink2)}
+.partage{margin-top:26px;text-align:center}
+.partage .btn{width:100%;max-width:360px}
+.partage input{margin-top:10px;text-align:center}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(88px + env(safe-area-inset-bottom));background:var(--brand);color:#fff;padding:10px 16px;border-radius:999px;font-size:15px;line-height:1.3;z-index:40;max-width:90vw;width:max-content;text-align:center;box-shadow:0 6px 18px rgba(0,0,0,.2)}
 .banner.inst{background:var(--lime-soft);color:var(--ink);display:flex;gap:12px;align-items:flex-start}
 .banner.inst img{width:40px;height:40px;border-radius:9px;flex:none;display:block}
 .banner.inst p{margin:0}
@@ -471,6 +475,7 @@ details summary{cursor:pointer;font-weight:700;color:var(--lime-ink);min-height:
       <div class="card recap" id="recap"></div>
       <div class="acts-col">
         <button type="button" class="btn primary" id="nouvelle">Nouvelle demande</button>
+        <button type="button" class="btn js-partager"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg>Partager l'appli avec un collègue</button>
         <a class="btn" href="tel:+33651138782">Appeler Geoffrey : 06 51 13 87 82</a>
         <button type="button" class="btn dark js-installer" hidden>Installer l'appli sur cet appareil</button>
       </div>
@@ -503,9 +508,15 @@ details summary{cursor:pointer;font-weight:700;color:var(--lime-ink);min-height:
     </details>
   </section>
 
+  <!-- Partager l'appli avec un collègue -->
+  <div class="partage">
+    <button type="button" class="btn js-partager"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg>Partager l'appli</button>
+    <input type="text" id="partage-lien" readonly value="https://diagproeco.github.io/agences/" aria-label="Lien de l'appli à copier" hidden>
+  </div>
   <p class="foot">Diag Pro Eco · 423 Grande Rue, 01340 Attignat · <a href="https://diagproeco.fr">diagproeco.fr</a></p>
 </main>
 
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 <div class="bar" id="bar">
   <div class="in">
     <button type="button" class="btn" id="btn-retour" hidden>Retour</button>
@@ -513,7 +524,7 @@ details summary{cursor:pointer;font-weight:700;color:var(--lime-ink);min-height:
   </div>
 </div>
 
-<script src="regles.js?v=1.1"></script>
-<script src="app.js?v=1.1"></script>
+<script src="regles.js?v=1.2"></script>
+<script src="app.js?v=1.2"></script>
 </body>
 </html>

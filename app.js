@@ -7,7 +7,7 @@
     cle: 'dpe-agences-2026',
     delaiDevis: 'dans la journée'
   };
-  var VERSION = '1.1';
+  var VERSION = '1.2';
   var R = window.Regles;
 
   /* ---------- outils ---------- */
@@ -625,6 +625,34 @@
     invite.userChoice.then(cacherInstall, cacherInstall);
   }
 
+  /* ---------- partager l'appli avec un collègue ---------- */
+  var LIEN_APPLI = 'https://diagproeco.github.io/agences/';
+  var TEXTE_PARTAGE = "L'appli DIAG PRO ECO pour demander un devis de diagnostics, devis dans la journée :";
+  var tToast = null;
+  function toast(msg) {
+    var t = $('#toast'); if (!t) return;
+    t.textContent = msg; t.hidden = false;
+    clearTimeout(tToast); tToast = setTimeout(function () { t.hidden = true; }, 3500);
+  }
+  function montrerLien() {
+    var i = $('#partage-lien'); if (!i) return;
+    i.hidden = false; i.focus(); i.select();
+    toast('Copiez le lien affiché sous le bouton.');
+  }
+  function copierLien() {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(TEXTE_PARTAGE + ' ' + LIEN_APPLI)
+        .then(function () { toast('Copié : collez-le dans un mail ou un message.'); }, montrerLien);
+    } else montrerLien();
+  }
+  function partager() {
+    // Téléphone : la fenêtre de partage (SMS, WhatsApp, mail…) ; ordinateur : le lien est copié
+    if (navigator.share && (IOS || ANDROID)) {
+      navigator.share({ title: 'Diag Pro Eco – Devis agences', text: TEXTE_PARTAGE, url: LIEN_APPLI })
+        .catch(function (e) { if (!e || e.name !== 'AbortError') copierLien(); });
+    } else copierLien();
+  }
+
   /* ---------- démarrage ---------- */
   function init() {
     initAdresse();
@@ -650,6 +678,7 @@
     $('#tab-devis').addEventListener('click', function () { onglet('devis'); });
     $('#tab-validite').addEventListener('click', function () { onglet('validite'); });
     $$('.js-installer').forEach(function (b) { b.addEventListener('click', installer); });
+    $$('.js-partager').forEach(function (b) { b.addEventListener('click', partager); });
     $$('[data-pas]').forEach(function (b) {
       b.addEventListener('click', function () {
         var n = Math.max(0, Math.min(60, (parseInt(val('pieces'), 10) || 0) + parseInt(b.getAttribute('data-pas'), 10)));
