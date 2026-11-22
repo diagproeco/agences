@@ -154,6 +154,10 @@ details summary{cursor:pointer;font-weight:700;color:var(--lime-ink);min-height:
 .recap ul{margin:6px 0 0;padding-left:20px}
 .acts-col{display:flex;flex-direction:column;gap:10px;margin:16px 0}
 .install{margin-top:8px;font-size:14px;color:var(--ink2)}
+.banner.inst{background:var(--lime-soft);color:var(--ink);display:flex;gap:12px;align-items:flex-start}
+.banner.inst img{width:40px;height:40px;border-radius:9px;flex:none;display:block}
+.banner.inst p{margin:0}
+.banner.inst .acts{margin-top:8px}
 .hist{margin-top:8px}
 .hist ul{list-style:none;margin:8px 0 0;padding:0}
 .hist li{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-top:1px solid #eceee8;font-size:14px}
@@ -178,6 +182,19 @@ details summary{cursor:pointer;font-weight:700;color:var(--lime-ink);min-height:
 <div class="strip">Rendez-vous sous 48 h · Devis dans la journée</div>
 
 <main>
+  <!-- Garder l'appli sur l'appareil (téléphone ou ordinateur) -->
+  <div class="banner inst" id="bandeau-installer" hidden>
+    <img src="icon-192.png" alt="" width="40" height="40">
+    <div>
+      <p><b>Gardez l'appli sur cet appareil</b></p>
+      <p id="inst-texte">Elle s'ouvre ensuite d'un geste, comme une vraie appli.</p>
+      <div class="acts">
+        <button type="button" class="btn dark js-installer" id="inst-oui" hidden>Installer l'appli</button>
+        <button type="button" class="btn" id="inst-non">Plus tard</button>
+      </div>
+    </div>
+  </div>
+
   <div class="tabs" role="tablist" aria-label="Choix de l'outil">
     <button type="button" role="tab" id="tab-devis" aria-controls="vue-devis" aria-selected="true">Demande de devis</button>
     <button type="button" role="tab" id="tab-validite" aria-controls="vue-validite" aria-selected="false">Diagnostics valables ?</button>

@@ -7,7 +7,7 @@
     cle: 'dpe-agences-2026',
     delaiDevis: 'dans la journée'
   };
-  var VERSION = '1.0';
+  var VERSION = '1.1';
   var R = window.Regles;
 
   /* ---------- outils ---------- */
@@ -594,16 +594,34 @@
     construireValidite();
   }
 
-  /* ---------- installation sur le téléphone ---------- */
+  /* ---------- garder l'appli sur le téléphone ou l'ordinateur ---------- */
   var invite = null;
+  var INSTALLEE = window.navigator.standalone === true ||
+    !!(window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
+  var IOS = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  var ANDROID = /android/i.test(navigator.userAgent);
+  function bandeauInstall(texte, bouton) {
+    var non = +LS.get('dpe_install_non', 0);
+    if (INSTALLEE || (non && Date.now() - non < 30 * 86400000)) return;   // « Plus tard » : on ne redemande pas avant 30 jours
+    $('#inst-texte').textContent = texte;
+    $('#inst-oui').hidden = !bouton;
+    $('#bandeau-installer').hidden = false;
+  }
+  function cacherInstall() {
+    invite = null;
+    $('#bandeau-installer').hidden = true;
+    $$('.js-installer').forEach(function (b) { b.hidden = true; });
+  }
   window.addEventListener('beforeinstallprompt', function (e) {
     e.preventDefault(); invite = e;
     $$('.js-installer').forEach(function (b) { b.hidden = false; });
+    bandeauInstall("Un clic sur « Installer l'appli » : elle se met sur votre écran et s'ouvre ensuite d'un geste.", true);
   });
+  window.addEventListener('appinstalled', function () { INSTALLEE = true; cacherInstall(); });
   function installer() {
     if (!invite) return;
     invite.prompt();
-    invite.userChoice.then(function () { invite = null; $$('.js-installer').forEach(function (b) { b.hidden = true; }); });
+    invite.userChoice.then(cacherInstall, cacherInstall);
   }
 
   /* ---------- démarrage ---------- */
@@ -637,7 +655,14 @@
         setVal('pieces', n); sauver();
       });
     });
-    if (/iphone|ipad|ipod/i.test(navigator.userAgent) && !window.navigator.standalone) $('#install-ios').hidden = false;
+    $('#inst-non').addEventListener('click', function () { LS.set('dpe_install_non', Date.now()); $('#bandeau-installer').hidden = true; });
+    if (IOS && !INSTALLEE) {
+      $('#install-ios').hidden = false;
+      bandeauInstall("Dans Safari, touchez Partager (le carré avec une flèche), puis « Sur l'écran d'accueil ».", false);
+    } else if (ANDROID && !INSTALLEE) {
+      // Si Chrome ne propose pas encore l'installation, on explique comment faire à la main
+      setTimeout(function () { if (!invite && !INSTALLEE) bandeauInstall("Dans Chrome, touchez le menu ⋮ puis « Ajouter à l'écran d'accueil ».", false); }, 3000);
+    }
     window.addEventListener('online', viderAttente);
 
     conditions();
