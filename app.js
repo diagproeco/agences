@@ -601,6 +601,7 @@
   var IOS = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
   var ANDROID = /android/i.test(navigator.userAgent);
   function bandeauInstall(texte, bouton) {
+    if (!$('#bandeau-installer')) return;   // ancienne page encore en cache : pas de bandeau
     var non = +LS.get('dpe_install_non', 0);
     if (INSTALLEE || (non && Date.now() - non < 30 * 86400000)) return;   // « Plus tard » : on ne redemande pas avant 30 jours
     $('#inst-texte').textContent = texte;
@@ -609,7 +610,7 @@
   }
   function cacherInstall() {
     invite = null;
-    $('#bandeau-installer').hidden = true;
+    if ($('#bandeau-installer')) $('#bandeau-installer').hidden = true;
     $$('.js-installer').forEach(function (b) { b.hidden = true; });
   }
   window.addEventListener('beforeinstallprompt', function (e) {
@@ -655,7 +656,7 @@
         setVal('pieces', n); sauver();
       });
     });
-    $('#inst-non').addEventListener('click', function () { LS.set('dpe_install_non', Date.now()); $('#bandeau-installer').hidden = true; });
+    if ($('#inst-non')) $('#inst-non').addEventListener('click', function () { LS.set('dpe_install_non', Date.now()); $('#bandeau-installer').hidden = true; });
     if (IOS && !INSTALLEE) {
       $('#install-ios').hidden = false;
       bandeauInstall("Dans Safari, touchez Partager (le carré avec une flèche), puis « Sur l'écran d'accueil ».", false);

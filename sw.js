@@ -1,5 +1,5 @@
 /* Diag Pro Eco - appli agences : fonctionne aussi sans réseau (sauf l'envoi, mis en attente) */
-var CACHE = 'agences-v3';
+var CACHE = 'agences-v4';
 var FICHIERS = ['./', './index.html', './regles.js', './app.js', './manifest.webmanifest', './logo-96.png', './icon-180.png', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', function (e) {
@@ -15,7 +15,8 @@ self.addEventListener('fetch', function (e) {
   if (req.method !== 'GET') return;
   if (new URL(req.url).origin !== self.location.origin) return; // adresses et relais : toujours par le réseau
   e.respondWith(
-    fetch(req).then(function (res) {
+    // « no-cache » : le navigateur revérifie auprès du site, pour ne jamais mélanger ancienne et nouvelle version
+    fetch(req.url, { cache: 'no-cache', credentials: 'same-origin' }).then(function (res) {
       if (res && res.ok) { var copie = res.clone(); caches.open(CACHE).then(function (c) { c.put(req, copie); }); }
       return res;
     }).catch(function () {
