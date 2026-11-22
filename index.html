@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Demande de devis – Diag Pro Eco</title>
+<meta name="description" content="Demandez un devis de diagnostics immobiliers à Diag Pro Eco en une minute, et vérifiez si vos diagnostics sont encore valables.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#2b2b2b">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<style>
+:root{
+  --ink:#1d211c;--ink2:#4a5148;--line:#dfe3da;--bg:#f4f5f0;--card:#fff;
+  --brand:#2b2b2b;--lime:#a0c840;--lime-soft:#eef5dc;--lime-ink:#3f5a0c;
+  --ok:#2f6b1f;--ok-bg:#e9f4e4;--warn:#7a4b00;--warn-bg:#fff3df;--bad:#a12a1c;--bad-bg:#fdecea;--info:#1f4c86;--info-bg:#eaf1fb;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
+[hidden]{display:none!important}
+a{color:var(--lime-ink)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.top{background:var(--brand);color:#fff;padding:calc(10px + env(safe-area-inset-top)) 16px 10px;display:flex;align-items:center;gap:12px}
+.top img{width:44px;height:44px;flex:none;display:block}
+.top .t1{font-weight:700;font-size:17px;line-height:1.2;margin:0}
+.top .t2{font-size:13px;color:#d7dccf;margin:0}
+.call{margin-left:auto;display:inline-flex;align-items:center;gap:6px;color:#fff;text-decoration:none;border:1.5px solid #767b70;border-radius:999px;padding:8px 14px;font-weight:600;font-size:15px;min-height:44px;white-space:nowrap}
+.call svg{width:18px;height:18px}
+.strip{background:var(--lime);color:#1a1d17;font-weight:700;font-size:14px;text-align:center;padding:8px 12px}
+main{max-width:640px;margin:0 auto;padding:16px 16px 130px}
+.tabs{display:flex;background:#e4e8dd;border-radius:12px;padding:4px;gap:4px;margin-bottom:18px}
+.tabs button{flex:1;border:0;background:transparent;border-radius:9px;padding:10px 8px;font:inherit;font-weight:600;font-size:15px;color:var(--ink2);min-height:44px;cursor:pointer}
+.tabs button[aria-selected=true]{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.14)}
+.banner{background:var(--info-bg);color:var(--info);border-radius:12px;padding:12px 14px;margin-bottom:14px;font-size:15px}
+.banner .acts{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.banner .btn{min-height:44px;padding:8px 14px;font-size:15px}
+.progress{margin-bottom:16px}
+.progress .lab{display:flex;justify-content:space-between;font-size:14px;color:var(--ink2);margin-bottom:6px}
+.progress .lab b{color:var(--ink)}
+.track{height:6px;background:#e0e4d8;border-radius:6px;overflow:hidden}
+.fill{height:100%;background:var(--lime);width:25%;transition:width .3s}
+.h1{font-size:24px;line-height:1.2;margin:2px 0 6px}
+.h2{font-size:18px;line-height:1.3;margin:0 0 4px}
+h1:focus,h2:focus{outline:none}
+.lead{color:var(--ink2);margin:0 0 18px}
+.q{border:0;margin:0 0 22px;padding:0;min-width:0}
+.q legend,.lbl{font-weight:700;font-size:16px;padding:0;display:block;margin-bottom:10px}
+.lbl{margin-bottom:6px}
+.opt{font-weight:400;color:var(--ink2)}
+.hint{font-size:14px;color:var(--ink2);margin:6px 0 0}
+.q legend+.hint{margin:-4px 0 10px}
+.tiles{display:grid;gap:10px}
+.cols2{grid-template-columns:1fr 1fr}
+.cols3{grid-template-columns:repeat(3,1fr)}
+.cols4{grid-template-columns:repeat(4,1fr)}
+.tile{position:relative;display:block;cursor:pointer}
+.tile input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+.tile>span{display:flex;align-items:center;gap:12px;height:100%;min-height:52px;padding:12px 14px;background:#fff;border:1.5px solid var(--line);border-radius:12px;font-size:16px;line-height:1.25;transition:border-color .15s,background .15s}
+.tile.big>span{min-height:74px;padding:14px 16px}
+.tile.big svg{width:30px;height:30px;flex:none;color:var(--brand)}
+.tile .tx{display:flex;flex-direction:column;gap:2px}
+.tile .tx b{font-size:17px}
+.tile small{font-size:14px;color:var(--ink2)}
+.tile.sm>span{justify-content:center;text-align:center;font-weight:700;padding:10px 6px}
+.tile input:checked+span{border-color:var(--brand);background:var(--lime-soft);box-shadow:inset 0 0 0 1px var(--brand)}
+.tile input:focus-visible+span{outline:3px solid #2b6cb0;outline-offset:2px}
+input[type=text],input[type=email],input[type=tel],input[type=number],input[type=date],textarea{width:100%;font:inherit;font-size:16px;color:var(--ink);background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;min-height:52px;margin:0}
+input[type=date]{appearance:none;-webkit-appearance:none;min-width:0}
+textarea{min-height:96px;resize:vertical}
+input:focus,textarea:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px rgba(160,200,64,.5)}
+.field{margin-bottom:14px}
+.row2{display:grid;grid-template-columns:118px 1fr;gap:10px;margin-top:10px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+@media (max-width:460px){.row3{grid-template-columns:1fr 1fr}.row3>div:first-child{grid-column:1/-1}.cols4{grid-template-columns:repeat(4,1fr)}}
+.stepper{display:flex}
+.stepper input{text-align:center;border-radius:0;-moz-appearance:textfield}
+.stepper input::-webkit-inner-spin-button{-webkit-appearance:none}
+.stepper button{width:52px;flex:none;border:1.5px solid var(--line);background:#fff;font-size:24px;line-height:1;color:var(--ink);cursor:pointer}
+.stepper button:first-child{border-radius:12px 0 0 12px;border-right:0}
+.stepper button:last-child{border-radius:0 12px 12px 0;border-left:0}
+.ac{position:relative}
+.ac ul{position:absolute;z-index:20;left:0;right:0;top:calc(100% + 4px);margin:0;padding:6px;list-style:none;background:#fff;border:1.5px solid var(--line);border-radius:12px;box-shadow:0 12px 28px rgba(0,0,0,.16);max-height:330px;overflow:auto}
+.ac li{padding:10px 12px;border-radius:8px;cursor:pointer}
+.ac li b{display:block;font-weight:600}
+.ac li span{font-size:13px;color:var(--ink2)}
+.ac li[aria-selected=true],.ac li:hover{background:var(--lime-soft)}
+.note{border-radius:12px;padding:12px 14px;font-size:15px;margin-top:10px}
+.note.warn{background:var(--warn-bg);color:var(--warn)}
+.note.bad{background:var(--bad-bg);color:var(--bad)}
+.note.info{background:var(--info-bg);color:var(--info)}
+.err{color:var(--bad);font-size:14px;font-weight:600;margin:8px 0 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px}
+.ck{position:relative;display:flex;gap:12px;align-items:flex-start;cursor:pointer}
+.ck input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+.ck .box{flex:none;width:26px;height:26px;border:2px solid #8f978a;border-radius:7px;background:#fff;display:grid;place-items:center;margin-top:1px}
+.ck input:checked+.box{background:var(--brand);border-color:var(--brand)}
+.ck input:checked+.box::after{content:"";width:12px;height:7px;border:3px solid #fff;border-top:0;border-right:0;transform:translate(0,-2px) rotate(-45deg)}
+.ck input:focus-visible+.box{outline:3px solid #2b6cb0;outline-offset:2px}
+.dg{padding:12px 0;border-top:1px solid #eceee8}
+.dg:first-child{border-top:0}
+.dg-tx{display:flex;flex-direction:column;gap:2px;min-width:0}
+.dg-nom{font-weight:700}
+.dg-raison{font-size:14px;color:var(--ink2)}
+.dg-val{font-size:14px;font-weight:600}
+.badge{display:inline-block;font-size:12px;font-weight:700;border-radius:999px;padding:2px 8px;margin-left:4px;vertical-align:1px;white-space:nowrap}
+.b-oblig{background:#2b2b2b;color:#fff}
+.b-confirm{background:var(--warn-bg);color:var(--warn)}
+.b-cond{background:#eceee8;color:var(--ink2)}
+.b-valide{background:var(--ok-bg);color:var(--ok)}
+.valable,.illimite{color:var(--ok)}.bientot,.suivi,.inconnu{color:var(--warn)}.perime{color:var(--bad)}
+.infos{margin:12px 0 0;padding:12px 14px 12px 32px;background:var(--info-bg);color:var(--info);border-radius:12px;font-size:14px}
+.infos:empty{display:none}
+.infos li+li{margin-top:6px}
+details.plus{margin-top:12px;border-top:1px solid #eceee8;padding-top:10px}
+details summary{cursor:pointer;font-weight:700;color:var(--lime-ink);min-height:44px;display:flex;align-items:center}
+.moi{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;background:var(--lime-soft);border-radius:12px;padding:12px 14px;margin-bottom:12px}
+.moi p{margin:0;font-size:15px}
+.linkbtn{border:0;background:none;color:var(--lime-ink);font:inherit;font-weight:700;text-decoration:underline;cursor:pointer;padding:4px;min-height:44px}
+.ex-row{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px}
+.ex-tog .ex-nom{font-weight:700;padding-top:2px}
+.ex-champs{margin-top:12px;padding-left:38px}
+.ex-resq{border:0;margin:10px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+.pill{position:relative;cursor:pointer}
+.pill input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+.pill span{display:inline-flex;align-items:center;min-height:44px;padding:8px 14px;border:1.5px solid var(--line);border-radius:999px;font-size:15px;background:#fff}
+.pill input:checked+span{border-color:var(--brand);background:var(--lime-soft);font-weight:700}
+.pill input:focus-visible+span{outline:3px solid #2b6cb0;outline-offset:2px}
+.ex-res:empty{display:none}
+.ex-res{margin-top:10px;border-radius:10px;padding:10px 12px;font-size:15px}
+.ex-res.valable,.ex-res.illimite{background:var(--ok-bg)}
+.ex-res.bientot,.ex-res.suivi,.ex-res.inconnu{background:var(--warn-bg)}
+.ex-res.perime{background:var(--bad-bg)}
+.ex-res p{margin:0}
+.ex-res .ex-txt{font-weight:700}
+.ex-res .ex-det,.ex-res .ex-note{color:var(--ink);font-weight:400;margin-top:6px;font-size:14px}
+.legal{font-size:13px;color:var(--ink2);margin:6px 2px 0}
+.hp{position:absolute!important;left:-9999px!important;width:1px;height:1px;opacity:0}
+.bar{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.97);border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom));z-index:30}
+.bar .in{max-width:640px;margin:0 auto;display:flex;gap:10px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:12px 18px;border-radius:12px;border:1.5px solid var(--line);background:#fff;color:var(--ink);font:inherit;font-weight:700;font-size:16px;cursor:pointer;text-decoration:none;text-align:center}
+.btn.primary{background:var(--lime);border-color:var(--lime);color:#1a1d17;flex:1}
+.btn.dark{background:var(--brand);border-color:var(--brand);color:#fff}
+.btn[disabled]{opacity:.6;cursor:progress}
+.btn svg{width:20px;height:20px}
+.succes{text-align:center;padding-top:8px}
+.ok-ic{width:76px;height:76px;border-radius:50%;background:var(--lime);display:grid;place-items:center;margin:10px auto 14px}
+.ok-ic svg{width:40px;height:40px;color:#1a1d17}
+.facts{list-style:none;padding:0;margin:0 0 18px;color:var(--ink2)}
+.facts li{margin:4px 0}
+.recap{text-align:left}
+.recap p{margin:0 0 6px}
+.recap ul{margin:6px 0 0;padding-left:20px}
+.acts-col{display:flex;flex-direction:column;gap:10px;margin:16px 0}
+.install{margin-top:8px;font-size:14px;color:var(--ink2)}
+.hist{margin-top:8px}
+.hist ul{list-style:none;margin:8px 0 0;padding:0}
+.hist li{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-top:1px solid #eceee8;font-size:14px}
+.hist li span:last-child{color:var(--ink2);white-space:nowrap}
+.sources ul{padding-left:20px;margin:8px 0}
+.sources li{margin:6px 0;font-size:14px}
+.foot{font-size:13px;color:var(--ink2);text-align:center;margin-top:26px}
+</style>
+</head>
+<body>
+<header class="top">
+  <img src="logo-96.png" alt="" width="44" height="44">
+  <div>
+    <p class="t1">Diag Pro Eco</p>
+    <p class="t2">Diagnostics immobiliers · Attignat</p>
+  </div>
+  <a class="call" href="tel:+33651138782" aria-label="Appeler Geoffrey au 06 51 13 87 82">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+    Appeler
+  </a>
+</header>
+<div class="strip">Rendez-vous sous 48 h · Devis dans la journée</div>
+
+<main>
+  <div class="tabs" role="tablist" aria-label="Choix de l'outil">
+    <button type="button" role="tab" id="tab-devis" aria-controls="vue-devis" aria-selected="true">Demande de devis</button>
+    <button type="button" role="tab" id="tab-validite" aria-controls="vue-validite" aria-selected="false">Diagnostics valables ?</button>
+  </div>
+
+  <div class="banner" id="bandeau-attente" hidden></div>
+  <div class="banner" id="bandeau-brouillon" hidden>
+    <span id="brouillon-texte">Une demande était en cours.</span>
+    <div class="acts">
+      <button type="button" class="btn dark" id="brouillon-oui">Reprendre</button>
+      <button type="button" class="btn" id="brouillon-non">Nouvelle demande</button>
+    </div>
+  </div>
+
+  <!-- ============ DEMANDE DE DEVIS ============ -->
+  <section id="vue-devis" role="tabpanel" aria-labelledby="tab-devis">
+    <div class="progress" id="progress">
+      <div class="lab"><b id="prog-tit">Votre besoin</b><span id="prog-num">Étape 1 sur 4</span></div>
+      <div class="track"><div class="fill" id="prog-fill"></div></div>
+    </div>
+
+    <form id="form" novalidate autocomplete="on">
+      <!-- Étape 1 -->
+      <div class="step" data-step="1">
+        <h1 class="h1" tabindex="-1">Votre demande de devis</h1>
+        <p class="lead">Une minute suffit. Geoffrey vous envoie le devis dans la journée.</p>
+        <fieldset class="q">
+          <legend>C'est pour…</legend>
+          <div class="tiles">
+            <label class="tile big"><input type="radio" name="projet" value="vente"><span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L2 12V2h10l8.6 8.6a2 2 0 0 1 0 2.8z"/><circle cx="7" cy="7" r="1.5"/></svg>
+              <span class="tx"><b>Une vente</b><small>Le dossier de diagnostics pour vendre</small></span></span></label>
+            <label class="tile big"><input type="radio" name="projet" value="location"><span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="7.5" cy="15.5" r="4.5"/><path d="M10.7 12.3L21 2m-4 4l3 3m-6 0l2 2"/></svg>
+              <span class="tx"><b>Une location</b><small>Les diagnostics à joindre au bail</small></span></span></label>
+            <label class="tile big"><input type="radio" name="projet" value="renovation"><span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.8-3.8a6 6 0 0 1-7.9 7.9l-6.9 6.9a2.1 2.1 0 0 1-3-3l6.9-6.9a6 6 0 0 1 7.9-7.9l-3.8 3.8z"/></svg>
+              <span class="tx"><b>Une rénovation</b><small>Audit énergétique, avant travaux</small></span></span></label>
+          </div>
+          <p class="err" data-err="projet" hidden>Choisissez une option.</p>
+        </fieldset>
+        <div class="hist" id="historique" hidden>
+          <details>
+            <summary>Vos dernières demandes sur cet appareil</summary>
+            <ul id="hist-liste"></ul>
+          </details>
+        </div>
+      </div>
+
+      <!-- Étape 2 -->
+      <div class="step" data-step="2" hidden>
+        <h2 class="h1" tabindex="-1">Le bien</h2>
+        <p class="lead">Type de bien et adresse.</p>
+        <fieldset class="q">
+          <legend>Type de bien</legend>
+          <div class="tiles cols2">
+            <label class="tile"><input type="radio" name="type" value="maison"><span>Maison</span></label>
+            <label class="tile"><input type="radio" name="type" value="appartement"><span>Appartement</span></label>
+            <label class="tile"><input type="radio" name="type" value="immeuble"><span>Immeuble collectif</span></label>
+            <label class="tile"><input type="radio" name="type" value="local"><span>Local commercial</span></label>
+            <label class="tile"><input type="radio" name="type" value="bureau"><span>Bureau</span></label>
+            <label class="tile"><input type="radio" name="type" value="autre"><span>Autre</span></label>
+          </div>
+          <p class="err" data-err="type" hidden>Choisissez le type de bien.</p>
+        </fieldset>
+
+        <div class="q">
+          <label class="lbl" for="adresse">Adresse du bien</label>
+          <div class="ac">
+            <input type="text" id="adresse" name="adresse" autocomplete="off" placeholder="Ex. : 12 rue de la Gare, Bourg" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="ac-liste" aria-describedby="ac-etat">
+            <ul id="ac-liste" role="listbox" aria-label="Adresses proposées" hidden></ul>
+          </div>
+          <p class="hint" id="ac-etat" aria-live="polite">Commencez à taper : les adresses s'affichent.</p>
+          <div class="row2">
+            <div><label class="lbl" for="cp">Code postal</label><input type="text" id="cp" name="cp" inputmode="numeric" maxlength="5" autocomplete="off"></div>
+            <div><label class="lbl" for="ville">Ville</label><input type="text" id="ville" name="ville" autocomplete="off"></div>
+          </div>
+          <div class="field" data-si="complement" hidden style="margin-top:10px">
+            <label class="lbl" for="complement">Complément <span class="opt">(bâtiment, étage, n° de lot)</span></label>
+            <input type="text" id="complement" name="complement" autocomplete="off">
+          </div>
+          <p class="err" data-err="adresse" hidden>Indiquez l'adresse, le code postal et la ville.</p>
+          <div class="note" id="zone-note" hidden></div>
+        </div>
+
+        <fieldset class="q">
+          <legend>Copropriété</legend>
+          <div class="tiles cols2">
+            <label class="tile"><input type="radio" name="copro" value="oui"><span>En copropriété</span></label>
+            <label class="tile"><input type="radio" name="copro" value="non"><span>Hors copropriété</span></label>
+          </div>
+          <p class="err" data-err="copro" hidden>Indiquez si le bien est en copropriété.</p>
+        </fieldset>
+      </div>
+
+      <!-- Étape 3 -->
+      <div class="step" data-step="3" hidden>
+        <h2 class="h1" tabindex="-1">Descriptif du bien</h2>
+        <p class="lead">Répondez « Je ne sais pas » si besoin : on vérifiera.</p>
+        <fieldset class="q">
+          <legend>Date de construction</legend>
+          <div class="tiles cols2">
+            <label class="tile"><input type="radio" name="construction" value="avant1949"><span>Avant 1949</span></label>
+            <label class="tile"><input type="radio" name="construction" value="1949_1997"><span>De 1949 au 1er juillet 1997</span></label>
+            <label class="tile"><input type="radio" name="construction" value="apres1997"><span>Après le 1er juillet 1997</span></label>
+            <label class="tile"><input type="radio" name="construction" value="nsp"><span>Je ne sais pas</span></label>
+          </div>
+          <p class="err" data-err="construction" hidden>Choisissez une période (ou « Je ne sais pas »).</p>
+        </fieldset>
+
+        <div class="q row3">
+          <div>
+            <label class="lbl" for="pieces">Pièces principales</label>
+            <div class="stepper">
+              <button type="button" data-pas="-1" aria-label="Une pièce de moins">−</button>
+              <input type="number" id="pieces" name="pieces" inputmode="numeric" min="0" max="60">
+              <button type="button" data-pas="1" aria-label="Une pièce de plus">+</button>
+            </div>
+          </div>
+          <div>
+            <label class="lbl" for="surface">Surface (m²)</label>
+            <input type="number" id="surface" name="surface" inputmode="decimal" min="0" placeholder="Approx.">
+          </div>
+          <div>
+            <label class="lbl" for="dependances">Dépendances (m²)</label>
+            <input type="number" id="dependances" name="dependances" inputmode="decimal" min="0" placeholder="Garage, cave…">
+          </div>
+        </div>
+
+        <fieldset class="q" data-si="habitation">
+          <legend>Installation électrique</legend>
+          <div class="tiles cols2">
+            <label class="tile"><input type="radio" name="elec" value="plus15"><span>Plus de 15 ans</span></label>
+            <label class="tile"><input type="radio" name="elec" value="moins15"><span>Moins de 15 ans</span></label>
+            <label class="tile"><input type="radio" name="elec" value="aucune"><span>Pas d'installation</span></label>
+            <label class="tile"><input type="radio" name="elec" value="nsp"><span>Je ne sais pas</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset class="q" data-si="habitation">
+          <legend>Installation gaz</legend>
+          <div class="tiles cols2">
+            <label class="tile"><input type="radio" name="gaz" value="plus15"><span>Plus de 15 ans</span></label>
+            <label class="tile"><input type="radio" name="gaz" value="moins15"><span>Moins de 15 ans</span></label>
+            <label class="tile"><input type="radio" name="gaz" value="aucun"><span>Pas de gaz</span></label>
+            <label class="tile"><input type="radio" name="gaz" value="nsp"><span>Je ne sais pas</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset class="q">
+          <legend>Raccordé au tout-à-l'égout ?</legend>
+          <div class="tiles cols3">
+            <label class="tile sm"><input type="radio" name="egout" value="oui"><span>Oui</span></label>
+            <label class="tile sm"><input type="radio" name="egout" value="non"><span>Non</span></label>
+            <label class="tile sm"><input type="radio" name="egout" value="nsp"><span>Je ne sais pas</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset class="q" data-si="piscine" hidden>
+          <legend>Piscine privative ?</legend>
+          <div class="tiles cols2">
+            <label class="tile sm"><input type="radio" name="piscine" value="oui"><span>Oui</span></label>
+            <label class="tile sm"><input type="radio" name="piscine" value="non"><span>Non</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset class="q" data-si="audit" hidden>
+          <legend>Classe du DPE actuel</legend>
+          <p class="hint">Pour savoir si un audit énergétique est obligatoire (classes E, F et G).</p>
+          <div class="tiles cols4">
+            <label class="tile sm"><input type="radio" name="dpeClasse" value="A"><span>A</span></label>
+            <label class="tile sm"><input type="radio" name="dpeClasse" value="B"><span>B</span></label>
+            <label class="tile sm"><input type="radio" name="dpeClasse" value="C"><span>C</span></label>
+            <label class="tile sm"><input type="radio" name="dpeClasse" value="D"><span>D</span></label>
+            <label class="tile sm"><input type="radio" name="dpeClasse" value="E"><span>E</span></label>
+            <label class="tile sm"><input type="radio" name="dpeClasse" value="F"><span>F</span></label>
+            <label class="tile sm"><input type="radio" name="dpeClasse" value="G"><span>G</span></label>
+            <label class="tile sm"><input type="radio" name="dpeClasse" value="nsp"><span>Je ne sais pas</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset class="q" data-si="recents">
+          <legend>Avez-vous des diagnostics récents ?</legend>
+          <div class="tiles cols3">
+            <label class="tile sm"><input type="radio" name="recents" value="oui"><span>Oui</span></label>
+            <label class="tile sm"><input type="radio" name="recents" value="non"><span>Non</span></label>
+            <label class="tile sm"><input type="radio" name="recents" value="nsp"><span>Je ne sais pas</span></label>
+          </div>
+        </fieldset>
+        <div id="existants" hidden>
+          <p class="hint" style="margin:-10px 0 12px">Cochez ceux que vous avez et indiquez la date du rapport : l'appli vous dit s'ils sont encore valables.</p>
+          <div id="ex-liste"></div>
+        </div>
+      </div>
+
+      <!-- Étape 4 -->
+      <div class="step" data-step="4" hidden>
+        <h2 class="h1" tabindex="-1">Récapitulatif</h2>
+        <p class="lead">Vérifiez la liste, puis vos coordonnées.</p>
+
+        <section class="card">
+          <h3 class="h2">Diagnostics à prévoir</h3>
+          <p class="hint" style="margin-top:0">Cochez ou décochez si besoin. Geoffrey confirme la liste dans le devis.</p>
+          <div id="aprevoir"></div>
+          <p class="err" data-err="liste" hidden>Cochez au moins un diagnostic.</p>
+          <ul class="infos" id="infos"></ul>
+          <details class="plus" id="autres-bloc">
+            <summary>Ajouter un autre diagnostic</summary>
+            <div id="autres"></div>
+          </details>
+        </section>
+
+        <section class="card">
+          <h3 class="h2">Vos coordonnées</h3>
+          <div class="moi" id="moi" hidden>
+            <p id="moi-texte"></p>
+            <button type="button" class="linkbtn" id="moi-modifier">Modifier</button>
+          </div>
+          <div id="moi-champs">
+            <div class="field"><label class="lbl" for="agence">Nom de l'agence</label><input type="text" id="agence" name="agence" autocomplete="organization"><p class="err" data-err="agence" hidden>Indiquez le nom de l'agence.</p></div>
+            <div class="field"><label class="lbl" for="contact">Votre nom <span class="opt">(facultatif)</span></label><input type="text" id="contact" name="contact" autocomplete="name"></div>
+            <div class="field"><label class="lbl" for="email">E-mail</label><input type="email" id="email" name="email" autocomplete="email" inputmode="email"><p class="err" data-err="email" hidden>Indiquez une adresse mail valide : le devis y sera envoyé.</p></div>
+            <div class="field"><label class="lbl" for="tel">Téléphone</label><input type="tel" id="tel" name="tel" autocomplete="tel" inputmode="tel"><p class="err" data-err="tel" hidden>Indiquez un numéro de téléphone.</p></div>
+          </div>
+          <label class="ck"><input type="checkbox" id="memo" checked><span class="box" aria-hidden="true"></span><span>Se souvenir de moi sur cet appareil</span></label>
+        </section>
+
+        <section class="card">
+          <h3 class="h2">Pour la visite</h3>
+          <div class="field" style="margin-top:12px"><label class="lbl" for="proprio">Propriétaire ou occupant <span class="opt">(facultatif)</span></label><input type="text" id="proprio" name="proprio" autocomplete="off"></div>
+          <div class="field"><label class="lbl" for="telProprio">Son téléphone <span class="opt">(facultatif)</span></label><input type="tel" id="telProprio" name="telProprio" autocomplete="off" inputmode="tel"></div>
+          <fieldset class="q" style="margin-bottom:16px">
+            <legend>Les clés sont à l'agence ?</legend>
+            <div class="tiles cols2">
+              <label class="tile sm"><input type="radio" name="cles" value="oui"><span>Oui</span></label>
+              <label class="tile sm"><input type="radio" name="cles" value="non"><span>Non</span></label>
+            </div>
+          </fieldset>
+          <fieldset class="q" style="margin-bottom:16px">
+            <legend>Disponibilités</legend>
+            <div class="tiles cols2">
+              <label class="tile sm"><input type="radio" name="dispo" value="asap"><span>Dès que possible</span></label>
+              <label class="tile sm"><input type="radio" name="dispo" value="semaine"><span>Cette semaine</span></label>
+              <label class="tile sm"><input type="radio" name="dispo" value="prochaine"><span>Semaine prochaine</span></label>
+              <label class="tile sm"><input type="radio" name="dispo" value="convenir"><span>À convenir</span></label>
+            </div>
+          </fieldset>
+          <fieldset class="q" style="margin-bottom:16px">
+            <legend>Devis au nom de</legend>
+            <div class="tiles cols2">
+              <label class="tile sm"><input type="radio" name="devis" value="agence"><span>L'agence</span></label>
+              <label class="tile sm"><input type="radio" name="devis" value="proprio"><span>Le propriétaire</span></label>
+            </div>
+          </fieldset>
+          <div class="field" data-si="email-proprio" hidden><label class="lbl" for="emailProprio">E-mail du propriétaire <span class="opt">(facultatif)</span></label><input type="email" id="emailProprio" name="emailProprio" autocomplete="off" inputmode="email"><p class="err" data-err="emailProprio" hidden>Cette adresse mail ne semble pas valide.</p></div>
+          <div class="field" style="margin-bottom:0"><label class="lbl" for="message">Message <span class="opt">(facultatif)</span></label><textarea id="message" name="message" placeholder="Accès, digicode, précisions…"></textarea></div>
+        </section>
+
+        <div class="hp" aria-hidden="true"><label for="site">Ne pas remplir</label><input type="text" id="site" name="site" tabindex="-1" autocomplete="off"></div>
+        <p class="legal">Vos informations servent uniquement à établir le devis et à organiser la visite. Elles sont envoyées à Diag Pro Eco et ne sont ni revendues ni utilisées pour de la publicité.</p>
+        <div class="note bad" id="envoi-erreur" role="alert" hidden></div>
+      </div>
+    </form>
+
+    <!-- Après l'envoi -->
+    <div class="succes" id="succes" hidden>
+      <div class="ok-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <h2 class="h1" id="succes-titre" tabindex="-1">Demande envoyée</h2>
+      <p class="lead" id="succes-texte"></p>
+      <ul class="facts">
+        <li>Rendez-vous possible sous 48 h</li>
+        <li>Rapport envoyé dès réception du règlement, le jour de la visite si possible</li>
+      </ul>
+      <div class="card recap" id="recap"></div>
+      <div class="acts-col">
+        <button type="button" class="btn primary" id="nouvelle">Nouvelle demande</button>
+        <a class="btn" href="tel:+33651138782">Appeler Geoffrey : 06 51 13 87 82</a>
+        <button type="button" class="btn dark js-installer" hidden>Installer l'appli sur cet appareil</button>
+      </div>
+      <p class="install" id="install-ios" hidden>Pour garder l'appli sur votre iPhone : touchez le bouton Partager, puis « Sur l'écran d'accueil ».</p>
+    </div>
+  </section>
+
+  <!-- ============ VALIDITÉ ============ -->
+  <section id="vue-validite" role="tabpanel" aria-labelledby="tab-validite" hidden>
+    <h1 class="h1" tabindex="-1">Vos diagnostics sont-ils encore valables ?</h1>
+    <p class="lead">Cochez les rapports que vous avez et indiquez leur date : l'appli vous dit jusqu'à quand ils sont valables.</p>
+    <fieldset class="q">
+      <legend>Pour…</legend>
+      <div class="tiles cols2">
+        <label class="tile sm"><input type="radio" name="vctx" value="vente" checked><span>Une vente</span></label>
+        <label class="tile sm"><input type="radio" name="vctx" value="location"><span>Une location</span></label>
+      </div>
+    </fieldset>
+    <div class="q">
+      <label class="lbl" for="v-signature">Date de signature prévue <span class="opt">(facultatif)</span></label>
+      <input type="date" id="v-signature">
+      <p class="hint">Les diagnostics doivent être valables le jour du compromis ou du bail. Sans date, l'appli calcule pour aujourd'hui.</p>
+    </div>
+    <div id="v-liste"></div>
+    <button type="button" class="btn primary" id="v-devis" style="width:100%;margin-top:6px" hidden>Demander un devis</button>
+    <details class="sources card" style="margin-top:18px">
+      <summary>D'où viennent ces règles ?</summary>
+      <p class="hint" id="sources-date"></p>
+      <ul id="sources"></ul>
+    </details>
+  </section>
+
+  <p class="foot">Diag Pro Eco · 423 Grande Rue, 01340 Attignat · <a href="https://diagproeco.fr">diagproeco.fr</a></p>
+</main>
+
+<div class="bar" id="bar">
+  <div class="in">
+    <button type="button" class="btn" id="btn-retour" hidden>Retour</button>
+    <button type="button" class="btn primary" id="btn-suivant">Continuer</button>
+  </div>
+</div>
+
+<script src="regles.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
