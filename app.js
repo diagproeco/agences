@@ -3,7 +3,7 @@
   'use strict';
 
   var CONFIG = {
-    relais: '__RELAIS__',            // adresse du relais Google (Apps Script) qui envoie le mail
+    relais: 'https://script.google.com/macros/s/AKfycbzSHjyqH3vo98HWBVMfYyW6OCS05zVsBnXM26UWiuHmBoPC2pwgv_-ueGvBXWH4u96hsQ/exec',            // adresse du relais Google (Apps Script) qui envoie le mail
     cle: 'dpe-agences-2026',
     delaiDevis: 'dans la journée'
   };
