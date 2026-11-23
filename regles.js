@@ -184,7 +184,7 @@
   }
 
   /* Diagnostics à prévoir selon les réponses.
-   * r : { projet, type, copro, construction, elec, gaz, egout, dpeClasse }
+   * r : { projet, type, copro, construction, elec, gaz, egout }
    * statut : oblig (coché), confirm (coché, à confirmer), cond (selon le cas, pas coché)
    */
   function aPrevoir(r) {
@@ -197,15 +197,9 @@
 
     if (r.projet === 'vente') {
       ajoute('dpe', 'oblig', r.type === 'maison' ? 'Obligatoire (sauf maison de moins de 50 m²)' : 'Toujours obligatoire');
-      if ((r.type === 'maison' || r.type === 'immeuble') && r.copro !== 'oui') {
-        if (['E', 'F', 'G'].indexOf(r.dpeClasse) !== -1) {
-          ajoute('audit', 'oblig', (r.type === 'maison' ? 'Maison' : 'Immeuble en monopropriété') + ' classé' + (r.type === 'maison' ? 'e ' : ' ') + r.dpeClasse + ' au DPE');
-        } else if (!r.dpeClasse || r.dpeClasse === 'nsp') {
-          ajoute('audit', 'cond', 'Obligatoire si le DPE est classé E, F ou G');
-        } else if (r.dpeClasse === 'D') {
-          infos.push('Classe D : l\'audit énergétique deviendra obligatoire pour vendre à partir du 1er janvier 2034.');
-        }
-      }
+      // Audit énergétique : maison seulement, en option à cocher (on ne demande pas la classe du DPE :
+      // la personne coche si elle pense que la maison sera classée E, F ou G)
+      if (r.type === 'maison' && r.copro !== 'oui') ajoute('audit', 'cond', 'Obligatoire en plus du DPE si la maison est classée E, F ou G');
       if (avant1997) ajoute('amiante', 'oblig', 'Permis de construire avant le 1er juillet 1997');
       else if (nspConstruction) ajoute('amiante', 'confirm', 'Si le permis de construire date d\'avant le 1er juillet 1997');
       if (hab) {
@@ -230,7 +224,7 @@
       if (avant1997 || nspConstruction) ajoute('amiante', 'cond', 'À tenir à disposition du locataire s\'il le demande (permis avant juillet 1997)');
       infos.push('Bruit des aérodromes : selon la commune, nous vérifions pour vous.');
     } else if (r.projet === 'renovation') {
-      ajoute('audit_renov', 'cond', 'Pour préparer les travaux et les aides');
+      if (r.type === 'maison') ajoute('audit_renov', 'cond', 'Pour préparer les travaux et les aides');
       ajoute('dpe', 'cond', 'État actuel du logement');
       if (avant1997 || nspConstruction) ajoute('amiante_travaux', 'cond', 'Avant travaux, si permis de construire avant juillet 1997');
       if (hab && (avant1949 || nspConstruction)) ajoute('plomb_travaux', 'cond', 'Avant travaux, si construit avant 1949');

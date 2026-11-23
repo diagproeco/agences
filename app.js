@@ -7,7 +7,7 @@
     cle: 'dpe-agences-2026',
     delaiDevis: 'dans la journée'
   };
-  var VERSION = '1.5';
+  var VERSION = '1.6';
   var R = window.Regles;
 
   /* ---------- outils ---------- */
@@ -79,7 +79,6 @@
     var hab = !r.type || ['maison', 'appartement', 'immeuble', 'autre'].indexOf(r.type) !== -1;
     montrer('[data-si=habitation]', hab);
     montrer('[data-si=piscine]', ['maison', 'immeuble', 'autre'].indexOf(r.type) !== -1);
-    montrer('[data-si=audit]', r.projet === 'vente' && (r.type === 'maison' || r.type === 'immeuble') && r.copro !== 'oui');
     montrer('[data-si=complement]', r.type === 'appartement' || r.copro === 'oui');
     montrer('[data-si=recents]', r.projet === 'vente' || r.projet === 'location');
     montrer('#existants', val('recents') === 'oui' && (r.projet === 'vente' || r.projet === 'location'));
@@ -254,6 +253,7 @@
     c.innerHTML = '';
     S.liste.forEach(function (it) { c.appendChild(ligne(it)); });
     S.autres = (R.CATALOGUE[r.projet] || []).filter(function (code) {
+      if ((code === 'audit' || code === 'audit_renov') && r.type !== 'maison') return false;   // audit : maison seulement
       return !S.liste.some(function (i) { return i.code === code; });
     }).map(function (code) { return { code: code, nom: R.nom(code, r.projet, r.copro), statut: 'ajout', raison: 'Ajouté par vous' }; });
     var ca = $('#autres');
