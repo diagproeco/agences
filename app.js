@@ -7,7 +7,7 @@
     cle: 'dpe-agences-2026',
     delaiDevis: 'dans la journée'
   };
-  var VERSION = '1.4';
+  var VERSION = '1.5';
   var R = window.Regles;
 
   /* ---------- outils ---------- */
@@ -662,6 +662,40 @@
     } else copierLien();
   }
 
+  /* ---------- partage réservé à Geoffrey et sa femme ---------- */
+  // Le bouton « Partager » n'apparaît que sur les appareils activés : lien perso ?equipe=CODE ouvert une fois,
+  // ou 5 touches rapides sur le logo puis le code (utile sur iPhone, où l'appli installée a sa propre mémoire).
+  // ?equipe=non retire le bouton de l'appareil.
+  var CODE_EQUIPE = '1437';
+  function estEquipe() { return LS.get('dpe_equipe', false) === true; }
+  function majEquipe() { var on = estEquipe(); $$('.js-equipe').forEach(function (el) { el.hidden = !on; }); }
+  function activerEquipe(code) {
+    if (String(code == null ? '' : code).trim() !== CODE_EQUIPE) return false;
+    LS.set('dpe_equipe', true); majEquipe(); toast('Bouton Partager activé sur cet appareil.');
+    return true;
+  }
+  function lienEquipe() {
+    var c = params.get('equipe');
+    if (c === null) return;
+    if (c === 'non') { LS.del('dpe_equipe'); majEquipe(); toast('Bouton Partager retiré de cet appareil.'); }
+    else activerEquipe(c);
+    params.delete('equipe');   // le code ne reste pas dans la barre d'adresse
+    var q = params.toString();
+    try { history.replaceState(null, '', location.pathname + (q ? '?' + q : '') + location.hash); } catch (e) { /* rien */ }
+  }
+  function toucherLogo() {
+    var logo = $('.top img'); if (!logo) return;
+    var n = 0, t = null;
+    logo.addEventListener('click', function () {
+      n++; clearTimeout(t); t = setTimeout(function () { n = 0; }, 1500);
+      if (n < 5) return;
+      n = 0;
+      if (estEquipe()) { toast('Le bouton Partager est déjà activé sur cet appareil.'); return; }
+      var c = window.prompt('Code');
+      if (c !== null && !activerEquipe(c)) toast('Code incorrect.');
+    });
+  }
+
   /* ---------- démarrage ---------- */
   function init() {
     initAdresse();
@@ -688,6 +722,7 @@
     $('#tab-validite').addEventListener('click', function () { onglet('validite'); });
     $$('.js-installer').forEach(function (b) { b.addEventListener('click', installer); });
     $$('.js-partager').forEach(function (b) { b.addEventListener('click', partager); });
+    lienEquipe(); majEquipe(); toucherLogo();
     $$('[data-pas]').forEach(function (b) {
       b.addEventListener('click', function () {
         var n = Math.max(0, Math.min(60, (parseInt(val('pieces'), 10) || 0) + parseInt(b.getAttribute('data-pas'), 10)));
