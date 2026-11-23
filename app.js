@@ -7,7 +7,7 @@
     cle: 'dpe-agences-2026',
     delaiDevis: 'dans la journée'
   };
-  var VERSION = '1.12';
+  var VERSION = '1.13';
   var R = window.Regles;
 
   /* ---------- outils ---------- */
@@ -89,6 +89,7 @@
     var avecExistants = r.projet === 'vente' || r.projet === 'location' || r.projet === 'audit';
     montrer('[data-si=recents]', avecExistants);
     montrer('#existants', val('recents') === 'oui' && avecExistants);
+    montrer('[data-si=audit-envoi]', r.projet === 'audit');   // audit : « Ça vous coûtera moins cher… » quand il y a d'anciens rapports
     if ($('#q-recents')) $('#q-recents').textContent = r.projet === 'audit' ? 'Avez-vous déjà un DPE ou d\'autres diagnostics ?' : 'Avez-vous des diagnostics récents ?';
     montrer('[data-si=email-proprio]', val('devis') === 'proprio');
   }
