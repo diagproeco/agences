@@ -7,7 +7,7 @@
     cle: 'dpe-agences-2026',
     delaiDevis: 'dans la journée'
   };
-  var VERSION = '1.8';
+  var VERSION = '1.9';
   var R = window.Regles;
 
   /* ---------- outils ---------- */
@@ -669,6 +669,21 @@
     } else copierLien();
   }
 
+  /* ---------- envoyer des rapports récents : mail tout prêt, la personne joint ses fichiers ---------- */
+  var MAIL_RAPPORTS = 'diagproeco@gmail.com';
+  function mailRapports(source) {
+    var ctx = source === 'validite' ? S.vctx : val('projet');
+    var store = (source === 'validite' ? S.vexistants[S.vctx] : S.existants) || {};
+    var adresse = source === 'validite' ? '' : [val('adresse'), (val('cp') + ' ' + val('ville')).trim()].filter(Boolean).join(', ');
+    var lignes = (R.CODES_VALIDITE[ctx] || []).filter(function (code) { return store[code] && store[code].on; }).map(function (code) {
+      return '- ' + R.nom(code, ctx, '') + (store[code].date ? ' du ' + R.fmtIso(store[code].date) : '');
+    });
+    var sujet = 'Rapports récents' + (adresse ? ' – ' + adresse : '');
+    var corps = 'Bonjour Geoffrey,\n\nVoici mes rapports récents' + (adresse ? ' pour le bien : ' + adresse : '') + '.\n' +
+      (lignes.length ? '\n' + lignes.join('\n') + '\n' : '') + '\n(Pensez à joindre vos rapports, PDF ou photos.)\n';
+    return 'mailto:' + MAIL_RAPPORTS + '?subject=' + encodeURIComponent(sujet) + '&body=' + encodeURIComponent(corps);
+  }
+
   /* ---------- partage réservé à Geoffrey et sa femme ---------- */
   // Le bouton « Partager » n'apparaît que sur les appareils activés : lien perso ?equipe=CODE ouvert une fois,
   // ou 5 touches rapides sur le logo puis le code (utile sur iPhone, où l'appli installée a sa propre mémoire).
@@ -730,6 +745,7 @@
     $('#tab-validite').addEventListener('click', function () { onglet('validite'); });
     $$('.js-installer').forEach(function (b) { b.addEventListener('click', installer); });
     $$('.js-partager').forEach(function (b) { b.addEventListener('click', partager); });
+    $$('.js-rapports').forEach(function (a) { a.addEventListener('click', function () { a.href = mailRapports(a.getAttribute('data-src')); }); });
     lienEquipe(); majEquipe(); toucherLogo();
     $$('[data-pas]').forEach(function (b) {
       b.addEventListener('click', function () {
