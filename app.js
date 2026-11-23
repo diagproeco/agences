@@ -7,7 +7,7 @@
     cle: 'dpe-agences-2026',
     delaiDevis: 'dans la journée'
   };
-  var VERSION = '1.13';
+  var VERSION = '1.14';
   var R = window.Regles;
 
   /* ---------- outils ---------- */
@@ -86,11 +86,10 @@
     montrer('[data-si=piscine]', !libre && ['maison', 'immeuble', 'autre'].indexOf(r.type) !== -1);
     if ($('#lead-recap')) $('#lead-recap').textContent = libre ? 'Vérifiez vos coordonnées.' : 'Vérifiez la liste, puis vos coordonnées.';
     montrer('[data-si=complement]', r.type === 'appartement' || r.copro === 'oui');
-    var avecExistants = r.projet === 'vente' || r.projet === 'location' || r.projet === 'audit';
+    var avecExistants = r.projet === 'vente' || r.projet === 'location';
     montrer('[data-si=recents]', avecExistants);
     montrer('#existants', val('recents') === 'oui' && avecExistants);
-    montrer('[data-si=audit-envoi]', r.projet === 'audit');   // audit : « Ça vous coûtera moins cher… » quand il y a d'anciens rapports
-    if ($('#q-recents')) $('#q-recents').textContent = r.projet === 'audit' ? 'Avez-vous déjà un DPE ou d\'autres diagnostics ?' : 'Avez-vous des diagnostics récents ?';
+    montrer('[data-si=dpe-audit]', r.projet === 'audit');   // audit : juste « Un DPE a-t-il été fait ? », rien d'obligatoire
     montrer('[data-si=email-proprio]', val('devis') === 'proprio');
   }
 
@@ -330,7 +329,6 @@
       if (!val('copro')) err.push('copro');
     }
     if (n === 3 && !val('construction')) err.push('construction');
-    if (n === 3 && val('projet') === 'audit' && !val('recents')) err.push('recents');   // audit : on doit savoir s'il y a déjà un DPE
     if (n === 4) {
       if (['autre', 'audit'].indexOf(val('projet')) === -1 && !diagnosticsCoches().length) err.push('liste');
       if (!val('agence')) err.push('agence');
@@ -361,7 +359,7 @@
     var coches = diagnosticsCoches();
     var nonRetenus = S.liste.filter(function (it) { return !estCoche(it); });
     var existants = [];
-    if (val('recents') === 'oui') {
+    if (val('recents') === 'oui' && (r.projet === 'vente' || r.projet === 'location')) {
       var cx = ctxExistants(r.projet);
       (R.CODES_VALIDITE[cx] || []).forEach(function (code) {
         var e = S.existants[code];
@@ -385,7 +383,7 @@
       elec: lib('elec', r.elec), gaz: lib('gaz', r.gaz), egout: lib('oui3', r.egout), piscine: lib('oui3', val('piscine')),
       dpeClasse: r.dpeClasse === 'nsp' ? 'Ne sait pas' : r.dpeClasse,
       diagnostics: r.projet === 'autre' ? [{ nom: val('autreDemande'), raison: '', statut: 'oblig' }]
-        : r.projet === 'audit' ? [{ nom: 'Audit énergétique réglementaire', raison: 'DPE ou diagnostics déjà faits : ' + (lib('oui3', val('recents')) || 'non indiqué'), statut: 'oblig' }]
+        : r.projet === 'audit' ? [{ nom: 'Audit énergétique réglementaire', raison: 'DPE fait depuis le 1er juillet 2021 : ' + (lib('oui3', val('dpeFait')) || 'non indiqué'), statut: 'oblig' }]
         : coches.map(function (it) { return { nom: it.nom, raison: it.raison, statut: it.statut }; }),
       nonRetenus: (r.projet === 'autre' || r.projet === 'audit') ? [] : nonRetenus.map(function (it) { return { nom: it.nom, raison: it.raison, statut: it.statut }; }),
       existants: existants, infos: S.infos,
