@@ -7,7 +7,7 @@
     cle: 'dpe-agences-2026',
     delaiDevis: 'dans la journée'
   };
-  var VERSION = '1.11';
+  var VERSION = '1.12';
   var R = window.Regles;
 
   /* ---------- outils ---------- */
@@ -86,8 +86,10 @@
     montrer('[data-si=piscine]', !libre && ['maison', 'immeuble', 'autre'].indexOf(r.type) !== -1);
     if ($('#lead-recap')) $('#lead-recap').textContent = libre ? 'Vérifiez vos coordonnées.' : 'Vérifiez la liste, puis vos coordonnées.';
     montrer('[data-si=complement]', r.type === 'appartement' || r.copro === 'oui');
-    montrer('[data-si=recents]', r.projet === 'vente' || r.projet === 'location');
-    montrer('#existants', val('recents') === 'oui' && (r.projet === 'vente' || r.projet === 'location'));
+    var avecExistants = r.projet === 'vente' || r.projet === 'location' || r.projet === 'audit';
+    montrer('[data-si=recents]', avecExistants);
+    montrer('#existants', val('recents') === 'oui' && avecExistants);
+    if ($('#q-recents')) $('#q-recents').textContent = r.projet === 'audit' ? 'Avez-vous déjà un DPE ou d\'autres diagnostics ?' : 'Avez-vous des diagnostics récents ?';
     montrer('[data-si=email-proprio]', val('devis') === 'proprio');
   }
 
@@ -305,8 +307,10 @@
     }
     sauver();
   }
+  // Diagnostics déjà faits : l'audit réglementaire se fait pour une vente, on reprend la liste de la vente
+  function ctxExistants(p) { return p === 'audit' ? 'vente' : p; }
   function preparerExistants() {
-    var p = val('projet');
+    var p = ctxExistants(val('projet'));
     if (S.ctxEx === p) return;
     S.ctxEx = p;
     if (p === 'vente' || p === 'location') construireExistants($('#ex-liste'), p, S.existants, R.aujourdhui, sauver);
@@ -325,6 +329,7 @@
       if (!val('copro')) err.push('copro');
     }
     if (n === 3 && !val('construction')) err.push('construction');
+    if (n === 3 && val('projet') === 'audit' && !val('recents')) err.push('recents');   // audit : on doit savoir s'il y a déjà un DPE
     if (n === 4) {
       if (['autre', 'audit'].indexOf(val('projet')) === -1 && !diagnosticsCoches().length) err.push('liste');
       if (!val('agence')) err.push('agence');
@@ -356,12 +361,13 @@
     var nonRetenus = S.liste.filter(function (it) { return !estCoche(it); });
     var existants = [];
     if (val('recents') === 'oui') {
-      (R.CODES_VALIDITE[r.projet] || []).forEach(function (code) {
+      var cx = ctxExistants(r.projet);
+      (R.CODES_VALIDITE[cx] || []).forEach(function (code) {
         var e = S.existants[code];
         if (!e || !e.on || !e.date) return;
-        var v = R.validite(code, r.projet, e, R.aujourdhui());
+        var v = R.validite(code, cx, e, R.aujourdhui());
         existants.push({
-          nom: R.nom(code, r.projet, r.copro), date: R.fmtIso(e.date),
+          nom: R.nom(code, cx, r.copro), date: R.fmtIso(e.date),
           resultat: (LIB.resultat[code] && LIB.resultat[code][e.resultat]) || '', validite: v.texte || ''
         });
       });
@@ -378,7 +384,7 @@
       elec: lib('elec', r.elec), gaz: lib('gaz', r.gaz), egout: lib('oui3', r.egout), piscine: lib('oui3', val('piscine')),
       dpeClasse: r.dpeClasse === 'nsp' ? 'Ne sait pas' : r.dpeClasse,
       diagnostics: r.projet === 'autre' ? [{ nom: val('autreDemande'), raison: '', statut: 'oblig' }]
-        : r.projet === 'audit' ? [{ nom: 'Audit énergétique réglementaire', raison: '', statut: 'oblig' }]
+        : r.projet === 'audit' ? [{ nom: 'Audit énergétique réglementaire', raison: 'DPE ou diagnostics déjà faits : ' + (lib('oui3', val('recents')) || 'non indiqué'), statut: 'oblig' }]
         : coches.map(function (it) { return { nom: it.nom, raison: it.raison, statut: it.statut }; }),
       nonRetenus: (r.projet === 'autre' || r.projet === 'audit') ? [] : nonRetenus.map(function (it) { return { nom: it.nom, raison: it.raison, statut: it.statut }; }),
       existants: existants, infos: S.infos,
@@ -674,7 +680,7 @@
   /* ---------- envoyer des rapports récents : mail tout prêt, la personne joint ses fichiers ---------- */
   var MAIL_RAPPORTS = 'diagproeco@gmail.com';
   function mailRapports(source) {
-    var ctx = source === 'validite' ? S.vctx : val('projet');
+    var ctx = source === 'validite' ? S.vctx : ctxExistants(val('projet'));
     var store = (source === 'validite' ? S.vexistants[S.vctx] : S.existants) || {};
     var adresse = source === 'validite' ? '' : [val('adresse'), (val('cp') + ' ' + val('ville')).trim()].filter(Boolean).join(', ');
     var lignes = (R.CODES_VALIDITE[ctx] || []).filter(function (code) { return store[code] && store[code].on; }).map(function (code) {
