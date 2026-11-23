@@ -7,7 +7,7 @@
     cle: 'dpe-agences-2026',
     delaiDevis: 'dans la journée'
   };
-  var VERSION = '1.9';
+  var VERSION = '1.10';
   var R = window.Regles;
 
   /* ---------- outils ---------- */
