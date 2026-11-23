@@ -418,8 +418,15 @@ details summary{cursor:pointer;font-weight:700;color:var(--lime-ink);min-height:
             <button type="button" class="linkbtn" id="moi-modifier">Modifier</button>
           </div>
           <div id="moi-champs">
-            <div class="field"><label class="lbl" for="agence">Nom de l'agence</label><input type="text" id="agence" name="agence" autocomplete="organization"><p class="err" data-err="agence" hidden>Indiquez le nom de l'agence.</p></div>
-            <div class="field"><label class="lbl" for="contact">Votre nom <span class="opt">(facultatif)</span></label><input type="text" id="contact" name="contact" autocomplete="name"></div>
+            <fieldset class="q" style="margin:12px 0 16px">
+              <legend>Vous êtes</legend>
+              <div class="tiles cols2">
+                <label class="tile sm"><input type="radio" name="qui" value="entreprise"><span>Une entreprise</span></label>
+                <label class="tile sm"><input type="radio" name="qui" value="autre"><span>Autre</span></label>
+              </div>
+            </fieldset>
+            <div class="field"><label class="lbl" for="agence" id="lbl-nom">Nom</label><input type="text" id="agence" name="agence" autocomplete="organization"><p class="err" data-err="agence" hidden>Indiquez le nom.</p></div>
+            <div class="field" id="bloc-contact"><label class="lbl" for="contact">Votre nom <span class="opt">(facultatif)</span></label><input type="text" id="contact" name="contact" autocomplete="name"></div>
             <div class="field"><label class="lbl" for="email">E-mail</label><input type="email" id="email" name="email" autocomplete="email" inputmode="email"><p class="err" data-err="email" hidden>Indiquez une adresse mail valide : le devis y sera envoyé.</p></div>
             <div class="field"><label class="lbl" for="tel">Téléphone</label><input type="tel" id="tel" name="tel" autocomplete="tel" inputmode="tel"><p class="err" data-err="tel" hidden>Indiquez un numéro de téléphone.</p></div>
           </div>
@@ -431,7 +438,7 @@ details summary{cursor:pointer;font-weight:700;color:var(--lime-ink);min-height:
           <div class="field" style="margin-top:12px"><label class="lbl" for="proprio">Propriétaire ou occupant <span class="opt">(facultatif)</span></label><input type="text" id="proprio" name="proprio" autocomplete="off"></div>
           <div class="field"><label class="lbl" for="telProprio">Son téléphone <span class="opt">(facultatif)</span></label><input type="tel" id="telProprio" name="telProprio" autocomplete="off" inputmode="tel"></div>
           <fieldset class="q" style="margin-bottom:16px">
-            <legend>Les clés sont à l'agence ?</legend>
+            <legend>Les clés sont chez vous ?</legend>
             <div class="tiles cols2">
               <label class="tile sm"><input type="radio" name="cles" value="oui"><span>Oui</span></label>
               <label class="tile sm"><input type="radio" name="cles" value="non"><span>Non</span></label>
@@ -449,7 +456,7 @@ details summary{cursor:pointer;font-weight:700;color:var(--lime-ink);min-height:
           <fieldset class="q" style="margin-bottom:16px">
             <legend>Devis au nom de</legend>
             <div class="tiles cols2">
-              <label class="tile sm"><input type="radio" name="devis" value="agence"><span>L'agence</span></label>
+              <label class="tile sm"><input type="radio" name="devis" value="agence"><span>À mon nom</span></label>
               <label class="tile sm"><input type="radio" name="devis" value="proprio"><span>Le propriétaire</span></label>
             </div>
           </fieldset>

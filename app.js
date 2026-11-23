@@ -7,7 +7,7 @@
     cle: 'dpe-agences-2026',
     delaiDevis: 'dans la journée'
   };
-  var VERSION = '1.3';
+  var VERSION = '1.4';
   var R = window.Regles;
 
   /* ---------- outils ---------- */
@@ -40,7 +40,8 @@
     gaz: { nsp: 'Ne sait pas', plus15: 'Plus de 15 ans', moins15: 'Moins de 15 ans', aucun: 'Pas de gaz' },
     oui3: { oui: 'Oui', non: 'Non', nsp: 'Ne sait pas' },
     dispo: { asap: 'Dès que possible', semaine: 'Cette semaine', prochaine: 'La semaine prochaine', convenir: 'À convenir' },
-    devis: { agence: "L'agence", proprio: 'Le propriétaire' },
+    devis: { agence: 'Le demandeur', proprio: 'Le propriétaire' },
+    qui: { entreprise: 'Entreprise', autre: 'Autre (particulier…)' },
     resultat: {
       amiante: { absence: "Pas d'amiante repéré", presence: 'Amiante repéré' },
       plomb: { absence: 'Pas de plomb au-dessus du seuil', presence: 'Plomb au-dessus du seuil' }
@@ -73,6 +74,7 @@
   function montrer(sel, oui) { $$(sel).forEach(function (el) { el.hidden = !oui; }); }
 
   function conditions() {
+    majQui();
     var r = reponses();
     var hab = !r.type || ['maison', 'appartement', 'immeuble', 'autre'].indexOf(r.type) !== -1;
     montrer('[data-si=habitation]', hab);
@@ -371,7 +373,7 @@
       diagnostics: coches.map(function (it) { return { nom: it.nom, raison: it.raison, statut: it.statut }; }),
       nonRetenus: nonRetenus.map(function (it) { return { nom: it.nom, raison: it.raison, statut: it.statut }; }),
       existants: existants, infos: S.infos,
-      agence: { nom: val('agence'), contact: val('contact'), email: val('email'), tel: val('tel') },
+      agence: { nom: val('agence') + (val('qui') === 'autre' ? ' (particulier / autre)' : ''), qui: lib('qui', val('qui')), contact: val('contact'), email: val('email'), tel: val('tel') },
       visite: { proprietaire: val('proprio'), telProprietaire: val('telProprio'), cles: lib('oui3', val('cles')), dispo: lib('dispo', val('dispo')) },
       devisAuNom: lib('devis', val('devis')), emailProprietaire: val('devis') === 'proprio' ? val('emailProprio') : '',
       message: val('message')
@@ -476,7 +478,7 @@
   }
   function nouvelle() {
     var garder = {};
-    ['agence', 'contact', 'email', 'tel'].forEach(function (k) { garder[k] = val(k); });
+    ['qui', 'agence', 'contact', 'email', 'tel'].forEach(function (k) { garder[k] = val(k); });
     form.reset();
     Object.keys(garder).forEach(function (k) { setVal(k, garder[k]); });
     $('#memo').checked = true;
@@ -484,18 +486,19 @@
     $('#zone-note').hidden = true;
     $('#ac-etat').textContent = "Commencez à taper : les adresses s'affichent.";
     $('#succes').hidden = true; form.hidden = false; $('#progress').hidden = false; $('#bar').hidden = false;
-    afficherMoi();
+    majQui(); afficherMoi();
     allerA(1);
   }
 
   /* ---------- agence mémorisée ---------- */
   function memoriserAgence() {
-    if ($('#memo').checked) LS.set('dpe_agence', { agence: val('agence'), contact: val('contact'), email: val('email'), tel: val('tel') });
+    if ($('#memo').checked) LS.set('dpe_agence', { qui: val('qui'), agence: val('agence'), contact: val('contact'), email: val('email'), tel: val('tel') });
     else LS.del('dpe_agence');
   }
   function chargerAgence() {
     var a = LS.get('dpe_agence', null);
-    if (a) ['agence', 'contact', 'email', 'tel'].forEach(function (k) { setVal(k, a[k] || ''); });
+    if (a) ['qui', 'agence', 'contact', 'email', 'tel'].forEach(function (k) { setVal(k, a[k] || ''); });
+    majQui();
     afficherMoi();
   }
   function afficherMoi() {
@@ -504,6 +507,12 @@
       $('#moi-texte').innerHTML = '<b>' + esc(a.agence) + '</b><br>' + esc([a.contact, a.email, a.tel].filter(Boolean).join(' · '));
       $('#moi').hidden = false; $('#moi-champs').hidden = true;
     } else { $('#moi').hidden = true; $('#moi-champs').hidden = false; }
+  }
+  function majQui() {
+    var autre = val('qui') === 'autre';
+    $('#lbl-nom').textContent = val('qui') === 'entreprise' ? "Nom de l'entreprise" : (autre ? 'Votre nom' : 'Nom');
+    $('#bloc-contact').hidden = autre;
+    $('#agence').setAttribute('autocomplete', autre ? 'name' : 'organization');
   }
   function ouvrirMoi() { $('#moi').hidden = true; $('#moi-champs').hidden = false; }
 
