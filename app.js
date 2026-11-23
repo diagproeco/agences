@@ -7,7 +7,7 @@
     cle: 'dpe-agences-2026',
     delaiDevis: 'dans la journée'
   };
-  var VERSION = '1.15';
+  var VERSION = '1.16';
   var R = window.Regles;
 
   /* ---------- outils ---------- */
@@ -67,7 +67,7 @@
   function reponses() {
     return {
       projet: val('projet'), type: val('type'), copro: val('copro'), construction: val('construction'),
-      elec: val('elec'), gaz: val('gaz'), egout: val('egout'), dpeClasse: val('dpeClasse')
+      elec: val('elec'), gaz: val('gaz'), dpeClasse: val('dpeClasse')
     };
   }
 
@@ -90,7 +90,6 @@
     var libre = autre || r.projet === 'audit';   // « Autre » et « Audit » : pas de liste ni de questions sur les installations
     montrer('[data-si=autre]', autre);
     montrer('[data-si=liste]', !libre);
-    montrer('[data-si=egout]', !libre);
     montrer('[data-si=habitation]', hab && !libre);
     montrer('[data-si=piscine]', !libre && ['maison', 'immeuble', 'autre'].indexOf(r.type) !== -1);
     if ($('#lead-recap')) $('#lead-recap').textContent = libre ? 'Vérifiez vos coordonnées.' : 'Vérifiez la liste, puis vos coordonnées.';
@@ -233,7 +232,7 @@
       row.className = 'ex-row';
       row.innerHTML =
         '<label class="ck ex-tog"><input type="checkbox"' + (e.on ? ' checked' : '') + '><span class="box" aria-hidden="true"></span>' +
-        '<span class="ex-nom">' + esc(R.nom(code, ctx, '')) + (code === 'anc' ? ' <span class="opt">(contrôle SPANC)</span>' : '') + '</span></label>' +
+        '<span class="ex-nom">' + esc(R.nom(code, ctx, '')) + '</span></label>' +
         '<div class="ex-champs"' + (e.on ? '' : ' hidden') + '>' +
         '<label class="lbl" for="' + id + '-date">Date du rapport</label>' +
         '<input type="date" id="' + id + '-date" max="' + R.isoAujourdhui() + '" value="' + esc(e.date) + '">' +
@@ -389,7 +388,7 @@
         insee: a.citycode || '', lat: a.lat || '', lon: a.lon || '', verifiee: !!S.adresse
       },
       construction: lib('construction', r.construction), pieces: val('pieces'), surface: val('surface'), dependances: val('dependances'),
-      elec: lib('elec', r.elec), gaz: lib('gaz', r.gaz), egout: lib('oui3', r.egout), piscine: lib('oui3', val('piscine')),
+      elec: lib('elec', r.elec), gaz: lib('gaz', r.gaz), piscine: lib('oui3', val('piscine')),
       dpeClasse: r.dpeClasse === 'nsp' ? 'Ne sait pas' : r.dpeClasse,
       diagnostics: r.projet === 'autre' ? [{ nom: val('autreDemande'), raison: '', statut: 'oblig' }]
         : r.projet === 'audit' ? [{ nom: 'Audit énergétique réglementaire', raison: 'DPE fait depuis le 1er juillet 2021 : ' + (lib('oui3', val('dpeFait')) || 'non indiqué'), statut: 'oblig' }]
@@ -421,7 +420,7 @@
     btn.disabled = true; btn.textContent = 'Envoi en cours…';
     $('#envoi-erreur').hidden = true;
     poster(p).then(function (rep) {
-      if (rep && rep.ok) { ajouterHistorique(p, rep.ref, 'Envoyée'); effacerBrouillon(); succes(p, false); }
+      if (rep && rep.ok) { ajouterHistorique(p, rep.ref, 'Envoyée'); effacerBrouillon(); succes(p, false, rep.accuse === true); }
       else erreurEnvoi(rep && rep.erreur);
     }).catch(function (e) {
       if (e && (e.reseau || e.name === 'AbortError')) {
@@ -485,13 +484,16 @@
   }
 
   /* ---------- écran de fin ---------- */
-  function succes(p, attente) {
+  function succes(p, attente, accuse) {
     form.hidden = true; $('#progress').hidden = true; $('#bar').hidden = true;
     $('#succes').hidden = false;
     $('#succes-titre').textContent = attente ? 'Demande enregistrée' : 'Demande envoyée';
+    var mail = p.agence && p.agence.email ? '<b>' + esc(p.agence.email) + '</b>' : 'votre adresse';
     $('#succes-texte').innerHTML = attente
-      ? "Pas de réseau pour le moment : la demande partira toute seule dès qu'il revient, à la prochaine ouverture de l'appli."
-      : 'Geoffrey vous envoie le devis <b>' + esc(CONFIG.delaiDevis) + '</b>.';
+      ? "Pas de réseau pour le moment : la demande partira toute seule dès qu'il revient, à la prochaine ouverture de l'appli. " +
+        'Vous recevrez alors un mail de confirmation à ' + mail + '.'
+      : 'Geoffrey vous envoie le devis <b>' + esc(CONFIG.delaiDevis) + '</b>.' +
+        (accuse ? '<br>Un mail de confirmation vient de partir à ' + mail + '.' : '');
     $('#recap').innerHTML =
       '<p><b>' + esc(p.projet + ' · ' + p.type) + '</b></p>' +
       '<p>' + esc([p.adresse.ligne, p.adresse.complement, p.adresse.cp + ' ' + p.adresse.ville].filter(Boolean).join(', ')) + '</p>' +

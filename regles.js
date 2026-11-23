@@ -20,7 +20,6 @@
     termites: 'Termites',
     carrez: 'Mesurage loi Carrez',
     boutin: 'Surface habitable (loi Boutin)',
-    anc: 'Assainissement non collectif',
     audit_renov: 'Audit énergétique',
     amiante_travaux: 'Amiante avant travaux',
     plomb_travaux: 'Plomb avant travaux'
@@ -28,7 +27,7 @@
 
   // Diagnostics dont l'agence peut indiquer la date, selon le projet
   var CODES_VALIDITE = {
-    vente: ['dpe', 'audit', 'amiante', 'plomb', 'elec', 'gaz', 'erp', 'termites', 'carrez', 'anc'],
+    vente: ['dpe', 'audit', 'amiante', 'plomb', 'elec', 'gaz', 'erp', 'termites', 'carrez'],
     location: ['dpe', 'plomb', 'elec', 'gaz', 'erp', 'amiante', 'boutin']
   };
 
@@ -119,7 +118,7 @@
   }
 
   /* Validité d'un diagnostic existant.
-   * code : dpe, audit, amiante, plomb, elec, gaz, erp, termites, carrez, boutin, anc
+   * code : dpe, audit, amiante, plomb, elec, gaz, erp, termites, carrez, boutin
    * ctx : 'vente' ou 'location'
    * e : { date: 'AAAA-MM-JJ', resultat: 'absence' | 'presence' }
    * ref : date à laquelle il doit être valable (signature), aujourd'hui par défaut
@@ -170,10 +169,6 @@
       case 'termites':
         fin = finApres(d, { mois: 6 });
         break;
-      case 'anc':
-        fin = finApres(d, { ans: 3 });
-        detail = 'Contrôle fait par le SPANC (mairie ou communauté de communes).';
-        break;
       case 'carrez':
       case 'boutin':
         return { etat: 'illimite', texte: 'Valable sans limite de durée, sauf travaux qui changent la surface.' };
@@ -184,7 +179,7 @@
   }
 
   /* Diagnostics à prévoir selon les réponses.
-   * r : { projet, type, copro, construction, elec, gaz, egout }
+   * r : { projet, type, copro, construction, elec, gaz }
    * statut : oblig (coché), confirm (coché, à confirmer), cond (selon le cas, pas coché)
    */
   function aPrevoir(r) {
@@ -210,8 +205,6 @@
       ajoute('erp', 'oblig', 'À moins de 6 mois de la signature');
       if (r.copro === 'oui') ajoute('carrez', 'oblig', 'Lot de copropriété');
       infos.push('Termites, mérule et bruit des aérodromes dépendent de la commune : nous vérifions pour vous.');
-      if (r.egout === 'non') infos.push('Assainissement individuel : contrôle à demander au SPANC (mairie ou communauté de communes), valable 3 ans.');
-      else if (!r.egout || r.egout === 'nsp') infos.push('Si le bien n\'est pas raccordé au tout-à-l\'égout : contrôle de l\'assainissement par le SPANC.');
     } else if (r.projet === 'location') {
       ajoute('dpe', 'oblig', 'Toujours obligatoire');
       if (hab) {
