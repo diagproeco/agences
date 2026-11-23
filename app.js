@@ -7,7 +7,7 @@
     cle: 'dpe-agences-2026',
     delaiDevis: 'dans la journée'
   };
-  var VERSION = '1.10';
+  var VERSION = '1.11';
   var R = window.Regles;
 
   /* ---------- outils ---------- */
@@ -32,7 +32,7 @@
   }
 
   var LIB = {
-    projet: { vente: 'Vente', location: 'Location', renovation: 'Rénovation', autre: 'Autre' },
+    projet: { vente: 'Vente', location: 'Location', renovation: 'Rénovation', audit: 'Audit énergétique réglementaire', autre: 'Autre' },
     type: { maison: 'Maison', appartement: 'Appartement', immeuble: 'Immeuble collectif', local: 'Local commercial', bureau: 'Bureau', autre: 'Autre type de bien' },
     copro: { oui: 'En copropriété', non: 'Hors copropriété' },
     construction: { nsp: 'Ne sait pas', avant1949: 'Avant 1949', '1949_1997': 'De 1949 au 1er juillet 1997', apres1997: 'Après le 1er juillet 1997' },
@@ -77,13 +77,14 @@
     majQui();
     var r = reponses();
     var hab = !r.type || ['maison', 'appartement', 'immeuble', 'autre'].indexOf(r.type) !== -1;
-    var autre = r.projet === 'autre';   // « Autre » : la personne écrit sa demande ; pas de liste ni de questions sur les installations
+    var autre = r.projet === 'autre';   // « Autre » : la personne écrit sa demande
+    var libre = autre || r.projet === 'audit';   // « Autre » et « Audit » : pas de liste ni de questions sur les installations
     montrer('[data-si=autre]', autre);
-    montrer('[data-si=liste]', !autre);
-    montrer('[data-si=egout]', !autre);
-    montrer('[data-si=habitation]', hab && !autre);
-    montrer('[data-si=piscine]', !autre && ['maison', 'immeuble', 'autre'].indexOf(r.type) !== -1);
-    if ($('#lead-recap')) $('#lead-recap').textContent = autre ? 'Vérifiez vos coordonnées.' : 'Vérifiez la liste, puis vos coordonnées.';
+    montrer('[data-si=liste]', !libre);
+    montrer('[data-si=egout]', !libre);
+    montrer('[data-si=habitation]', hab && !libre);
+    montrer('[data-si=piscine]', !libre && ['maison', 'immeuble', 'autre'].indexOf(r.type) !== -1);
+    if ($('#lead-recap')) $('#lead-recap').textContent = libre ? 'Vérifiez vos coordonnées.' : 'Vérifiez la liste, puis vos coordonnées.';
     montrer('[data-si=complement]', r.type === 'appartement' || r.copro === 'oui');
     montrer('[data-si=recents]', r.projet === 'vente' || r.projet === 'location');
     montrer('#existants', val('recents') === 'oui' && (r.projet === 'vente' || r.projet === 'location'));
@@ -325,7 +326,7 @@
     }
     if (n === 3 && !val('construction')) err.push('construction');
     if (n === 4) {
-      if (val('projet') !== 'autre' && !diagnosticsCoches().length) err.push('liste');
+      if (['autre', 'audit'].indexOf(val('projet')) === -1 && !diagnosticsCoches().length) err.push('liste');
       if (!val('agence')) err.push('agence');
       if (!EMAIL_RE.test(val('email'))) err.push('email');
       if (val('tel').replace(/\D/g, '').length < 10) err.push('tel');
@@ -377,8 +378,9 @@
       elec: lib('elec', r.elec), gaz: lib('gaz', r.gaz), egout: lib('oui3', r.egout), piscine: lib('oui3', val('piscine')),
       dpeClasse: r.dpeClasse === 'nsp' ? 'Ne sait pas' : r.dpeClasse,
       diagnostics: r.projet === 'autre' ? [{ nom: val('autreDemande'), raison: '', statut: 'oblig' }]
+        : r.projet === 'audit' ? [{ nom: 'Audit énergétique réglementaire', raison: '', statut: 'oblig' }]
         : coches.map(function (it) { return { nom: it.nom, raison: it.raison, statut: it.statut }; }),
-      nonRetenus: r.projet === 'autre' ? [] : nonRetenus.map(function (it) { return { nom: it.nom, raison: it.raison, statut: it.statut }; }),
+      nonRetenus: (r.projet === 'autre' || r.projet === 'audit') ? [] : nonRetenus.map(function (it) { return { nom: it.nom, raison: it.raison, statut: it.statut }; }),
       existants: existants, infos: S.infos,
       agence: { nom: val('agence') + (val('qui') === 'autre' ? ' (particulier / autre)' : ''), qui: lib('qui', val('qui')), contact: val('contact'), email: val('email'), tel: val('tel') },
       visite: { proprietaire: val('proprio'), telProprietaire: val('telProprio'), cles: lib('oui3', val('cles')), dispo: lib('dispo', val('dispo')) },
