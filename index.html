@@ -265,13 +265,15 @@ details summary{cursor:pointer;font-weight:700;color:var(--lime-ink);min-height:
         <p class="lead">Type de bien et adresse.</p>
         <fieldset class="q">
           <legend>Type de bien</legend>
+          <p class="hint" data-si="audit-bien" hidden>Hors copropriété : un seul propriétaire pour tout le bâtiment.</p>
           <div class="tiles cols2">
             <label class="tile"><input type="radio" name="type" value="maison"><span>Maison</span></label>
-            <label class="tile"><input type="radio" name="type" value="appartement"><span>Appartement</span></label>
-            <label class="tile"><input type="radio" name="type" value="immeuble"><span>Immeuble collectif</span></label>
-            <label class="tile"><input type="radio" name="type" value="local"><span>Local commercial</span></label>
-            <label class="tile"><input type="radio" name="type" value="bureau"><span>Bureau</span></label>
-            <label class="tile"><input type="radio" name="type" value="autre"><span>Autre</span></label>
+            <label class="tile" data-si="audit-bien" hidden><input type="radio" name="type" value="mixte"><span>Logement avec commerce</span></label>
+            <label class="tile" data-si="pas-audit"><input type="radio" name="type" value="appartement"><span>Appartement</span></label>
+            <label class="tile" data-si="pas-audit"><input type="radio" name="type" value="immeuble"><span>Immeuble collectif</span></label>
+            <label class="tile" data-si="pas-audit"><input type="radio" name="type" value="local"><span>Local commercial</span></label>
+            <label class="tile" data-si="pas-audit"><input type="radio" name="type" value="bureau"><span>Bureau</span></label>
+            <label class="tile" data-si="pas-audit"><input type="radio" name="type" value="autre"><span>Autre</span></label>
           </div>
           <p class="err" data-err="type" hidden>Choisissez le type de bien.</p>
         </fieldset>
@@ -295,7 +297,7 @@ details summary{cursor:pointer;font-weight:700;color:var(--lime-ink);min-height:
           <div class="note" id="zone-note" hidden></div>
         </div>
 
-        <fieldset class="q">
+        <fieldset class="q" data-si="copro">
           <legend>Copropriété</legend>
           <div class="tiles cols2">
             <label class="tile"><input type="radio" name="copro" value="oui"><span>En copropriété</span></label>

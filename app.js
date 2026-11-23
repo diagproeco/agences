@@ -7,7 +7,7 @@
     cle: 'dpe-agences-2026',
     delaiDevis: 'dans la journée'
   };
-  var VERSION = '1.14';
+  var VERSION = '1.15';
   var R = window.Regles;
 
   /* ---------- outils ---------- */
@@ -33,7 +33,7 @@
 
   var LIB = {
     projet: { vente: 'Vente', location: 'Location', renovation: 'Rénovation', audit: 'Audit énergétique réglementaire', autre: 'Autre' },
-    type: { maison: 'Maison', appartement: 'Appartement', immeuble: 'Immeuble collectif', local: 'Local commercial', bureau: 'Bureau', autre: 'Autre type de bien' },
+    type: { maison: 'Maison', mixte: 'Logement avec commerce', appartement: 'Appartement', immeuble: 'Immeuble collectif', local: 'Local commercial', bureau: 'Bureau', autre: 'Autre type de bien' },
     copro: { oui: 'En copropriété', non: 'Hors copropriété' },
     construction: { nsp: 'Ne sait pas', avant1949: 'Avant 1949', '1949_1997': 'De 1949 au 1er juillet 1997', apres1997: 'Après le 1er juillet 1997' },
     elec: { nsp: 'Ne sait pas', plus15: 'Plus de 15 ans', moins15: 'Moins de 15 ans', aucune: "Pas d'installation" },
@@ -73,8 +73,17 @@
 
   function montrer(sel, oui) { $$(sel).forEach(function (el) { el.hidden = !oui; }); }
 
+  // Audit réglementaire : maison ou logement avec commerce, toujours hors copropriété (un seul propriétaire)
+  var TYPES_AUDIT = ['maison', 'mixte'];
   function conditions() {
     majQui();
+    var audit = val('projet') === 'audit';
+    // Un type de bien qui n'existe pas pour ce projet est décoché (ex. « Appartement » choisi pour une vente, puis retour sur l'audit)
+    var t = val('type');
+    if (t && (audit ? TYPES_AUDIT.indexOf(t) === -1 : t === 'mixte')) setVal('type', '');
+    montrer('[data-si=pas-audit]', !audit);
+    montrer('[data-si=audit-bien]', audit);
+    montrer('[data-si=copro]', !audit);
     var r = reponses();
     var hab = !r.type || ['maison', 'appartement', 'immeuble', 'autre'].indexOf(r.type) !== -1;
     var autre = r.projet === 'autre';   // « Autre » : la personne écrit sa demande
@@ -85,7 +94,7 @@
     montrer('[data-si=habitation]', hab && !libre);
     montrer('[data-si=piscine]', !libre && ['maison', 'immeuble', 'autre'].indexOf(r.type) !== -1);
     if ($('#lead-recap')) $('#lead-recap').textContent = libre ? 'Vérifiez vos coordonnées.' : 'Vérifiez la liste, puis vos coordonnées.';
-    montrer('[data-si=complement]', r.type === 'appartement' || r.copro === 'oui');
+    montrer('[data-si=complement]', !audit && (r.type === 'appartement' || r.copro === 'oui'));
     var avecExistants = r.projet === 'vente' || r.projet === 'location';
     montrer('[data-si=recents]', avecExistants);
     montrer('#existants', val('recents') === 'oui' && avecExistants);
@@ -326,7 +335,7 @@
     if (n === 2) {
       if (!val('type')) err.push('type');
       if (!val('adresse') || !/^\d{5}$/.test(val('cp')) || !val('ville')) err.push('adresse');
-      if (!val('copro')) err.push('copro');
+      if (!val('copro') && val('projet') !== 'audit') err.push('copro');   // audit : hors copropriété d'office
     }
     if (n === 3 && !val('construction')) err.push('construction');
     if (n === 4) {
@@ -374,7 +383,7 @@
     return {
       v: 1, k: CONFIG.cle, hp: $('#site').value, test: TEST, src: SOURCE, appli: VERSION,
       envoyeLe: new Date().toISOString(),
-      projet: lib('projet', r.projet), type: lib('type', r.type), copro: lib('copro', r.copro),
+      projet: lib('projet', r.projet), type: lib('type', r.type), copro: lib('copro', r.projet === 'audit' ? 'non' : r.copro),
       adresse: {
         ligne: val('adresse'), complement: val('complement'), cp: val('cp'), ville: val('ville'),
         insee: a.citycode || '', lat: a.lat || '', lon: a.lon || '', verifiee: !!S.adresse
