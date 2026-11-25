@@ -7,7 +7,7 @@
     cle: 'dpe-agences-2026',
     delaiDevis: 'dans la journée'
   };
-  var VERSION = '1.16';
+  var VERSION = '1.17';
   var R = window.Regles;
 
   /* ---------- outils ---------- */
@@ -629,18 +629,26 @@
   }
 
   /* ---------- garder l'appli sur le téléphone ou l'ordinateur ---------- */
+  // Sur téléphone, le bouton « Installer l'appli » est là tout de suite : installation en un geste quand le
+  // navigateur le permet, sinon il ouvre la page « installer », qui montre les gestes pour ce téléphone-là
+  // (Chrome, Samsung Internet, Safari, ou bouton pour quitter Messenger, Facebook… d'abord).
+  var PAGE_INSTALLER = 'installer';
   var invite = null;
   var INSTALLEE = window.navigator.standalone === true ||
     !!(window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
   var IOS = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
   var ANDROID = /android/i.test(navigator.userAgent);
-  function bandeauInstall(texte, bouton) {
+  var TELEPHONE = IOS || ANDROID;
+  function bandeauInstall(texte) {
     if (!$('#bandeau-installer')) return;   // ancienne page encore en cache : pas de bandeau
     var non = +LS.get('dpe_install_non', 0);
     if (INSTALLEE || (non && Date.now() - non < 30 * 86400000)) return;   // « Plus tard » : on ne redemande pas avant 30 jours
     $('#inst-texte').textContent = texte;
-    $('#inst-oui').hidden = !bouton;
+    $('#inst-oui').hidden = false;
     $('#bandeau-installer').hidden = false;
+  }
+  function montrerBoutonsInstall() {
+    if (!INSTALLEE) $$('.js-installer').forEach(function (b) { b.hidden = false; });
   }
   function cacherInstall() {
     invite = null;
@@ -649,19 +657,22 @@
   }
   window.addEventListener('beforeinstallprompt', function (e) {
     e.preventDefault(); invite = e;
-    $$('.js-installer').forEach(function (b) { b.hidden = false; });
-    bandeauInstall("Un clic sur « Installer l'appli » : elle se met sur votre écran et s'ouvre ensuite d'un geste.", true);
+    montrerBoutonsInstall();
+    bandeauInstall("Un geste sur « Installer l'appli » : elle se met sur votre écran et s'ouvre ensuite comme une vraie appli.");
   });
   window.addEventListener('appinstalled', function () { INSTALLEE = true; cacherInstall(); });
   function installer() {
-    if (!invite) return;
-    invite.prompt();
-    invite.userChoice.then(cacherInstall, cacherInstall);
+    if (invite) {
+      invite.prompt();
+      invite.userChoice.then(cacherInstall, cacherInstall);
+      return;
+    }
+    location.href = PAGE_INSTALLER;   // pas d'installation en un geste ici : la page montre les gestes pour ce téléphone
   }
 
   /* ---------- partager l'appli avec un collègue ---------- */
-  var LIEN_APPLI = 'https://diagproeco.github.io/agences/';
-  var TEXTE_PARTAGE = "L'appli DIAG PRO ECO pour demander un devis de diagnostics, devis dans la journée :";
+  var LIEN_APPLI = 'https://diagproeco.github.io/agences/installer';   // le lien partagé ouvre directement la page pour installer l'appli
+  var TEXTE_PARTAGE = "L'appli Diagproeco pour vos demandes de devis de diagnostics, devis dans la journée. Pour l'installer sur votre téléphone :";
   var tToast = null;
   function toast(msg) {
     var t = $('#toast'); if (!t) return;
@@ -682,7 +693,7 @@
   function partager() {
     // Téléphone : la fenêtre de partage (SMS, WhatsApp, mail…) ; ordinateur : le lien est copié
     if (navigator.share && (IOS || ANDROID)) {
-      navigator.share({ title: 'Diag Pro Eco – Devis agences', text: TEXTE_PARTAGE, url: LIEN_APPLI })
+      navigator.share({ title: 'Diagproeco – Demande de devis', text: TEXTE_PARTAGE, url: LIEN_APPLI })
         .catch(function (e) { if (!e || e.name !== 'AbortError') copierLien(); });
     } else copierLien();
   }
@@ -772,12 +783,10 @@
       });
     });
     if ($('#inst-non')) $('#inst-non').addEventListener('click', function () { LS.set('dpe_install_non', Date.now()); $('#bandeau-installer').hidden = true; });
-    if (IOS && !INSTALLEE) {
-      $('#install-ios').hidden = false;
-      bandeauInstall("Dans Safari, touchez Partager (le carré avec une flèche), puis « Sur l'écran d'accueil ».", false);
-    } else if (ANDROID && !INSTALLEE) {
-      // Si Chrome ne propose pas encore l'installation, on explique comment faire à la main
-      setTimeout(function () { if (!invite && !INSTALLEE) bandeauInstall("Dans Chrome, touchez le menu ⋮ puis « Ajouter à l'écran d'accueil ».", false); }, 3000);
+    if (TELEPHONE && !INSTALLEE) {
+      // Téléphone : le bouton est là tout de suite (en un geste si possible, sinon la page « installer » guide)
+      montrerBoutonsInstall();
+      if (!invite) bandeauInstall("Elle se met sur votre écran et s'ouvre ensuite d'un geste, comme une vraie appli.");
     }
     window.addEventListener('online', viderAttente);
 

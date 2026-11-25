@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Installer l'appli Diagproeco</title>
+<meta name="description" content="Installez l'appli Diagproeco sur votre téléphone : demande de devis de diagnostics immobiliers en une minute, devis dans la journée.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#2b2b2b">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Diagproeco">
+<meta property="og:title" content="Installez l'appli Diagproeco">
+<meta property="og:description" content="Vos demandes de devis de diagnostics en une minute, devis dans la journée.">
+<meta property="og:image" content="https://diagproeco.github.io/agences/icon-512.png">
+<meta property="og:url" content="https://diagproeco.github.io/agences/installer">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<script>
+  // Déjà installée et ouverte depuis l'écran d'accueil : on va directement à l'appli
+  if (navigator.standalone === true || (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches)) location.replace('./');
+</script>
+<style>
+:root{
+  --ink:#1d211c;--ink2:#4a5148;--line:#dfe3da;--bg:#f4f5f0;--card:#fff;
+  --brand:#2b2b2b;--lime:#a0c840;--lime-soft:#eef5dc;--lime-ink:#3f5a0c;
+  --ok:#2f6b1f;--ok-bg:#e9f4e4;--warn:#7a4b00;--warn-bg:#fff3df;--info:#1f4c86;--info-bg:#eaf1fb;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
+[hidden]{display:none!important}
+a{color:var(--lime-ink)}
+.top{background:var(--brand);color:#fff;padding:calc(10px + env(safe-area-inset-top)) 16px 10px;display:flex;align-items:center;gap:12px}
+.top img{width:44px;height:44px;flex:none;display:block}
+.top .t1{font-weight:700;font-size:17px;line-height:1.2;margin:0}
+.top .t2{font-size:13px;color:#d7dccf;margin:0}
+.call{margin-left:auto;display:inline-flex;align-items:center;gap:6px;color:#fff;text-decoration:none;border:1.5px solid #767b70;border-radius:999px;padding:8px 14px;font-weight:600;font-size:15px;min-height:44px;white-space:nowrap}
+.call svg{width:18px;height:18px}
+main{max-width:560px;margin:0 auto;padding:18px 16px calc(28px + env(safe-area-inset-bottom))}
+.hero{text-align:center}
+.app-ic{width:88px;height:88px;border-radius:22px;box-shadow:0 8px 22px rgba(0,0,0,.22);display:block;margin:8px auto 16px}
+.hero h1{font-size:25px;line-height:1.2;margin:0 0 8px}
+.lead{color:var(--ink2);margin:0 auto 20px;max-width:28em}
+.h2{font-size:18px;line-height:1.3;margin:0 0 4px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px}
+.card.alerte{background:var(--warn-bg);border-color:#f0d9b0}
+.card.alerte .h2{color:var(--warn)}
+.card.ok{background:var(--ok-bg);border-color:#c9e2bf}
+.card.ok .h2{color:var(--ok)}
+.card p{margin:6px 0 0}
+.bloc{margin-bottom:14px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:12px 18px;border-radius:12px;border:1.5px solid var(--line);background:#fff;color:var(--ink);font:inherit;font-weight:700;font-size:16px;cursor:pointer;text-decoration:none;text-align:center;-webkit-tap-highlight-color:transparent}
+.btn svg{width:22px;height:22px;flex:none}
+.btn.primary{background:var(--lime);border-color:var(--lime);color:#1a1d17}
+.btn.big{width:100%;min-height:60px;font-size:19px;margin-top:12px}
+#c-direct .btn.big{margin-top:0}
+.btn.wide{width:100%;margin-top:12px}
+.hint{font-size:14px;color:var(--ink2);margin:8px 0 0}
+.centre{text-align:center}
+.etapes{list-style:none;margin:10px 0 0;padding:0;counter-reset:e}
+.etapes li{counter-increment:e;display:flex;gap:12px;align-items:flex-start;padding:11px 0;border-top:1px solid #eceee8}
+.etapes li:first-child{border-top:0}
+.etapes li::before{content:counter(e);flex:none;width:30px;height:30px;border-radius:50%;background:var(--brand);color:#fff;font-weight:700;font-size:15px;display:grid;place-items:center;margin-top:2px}
+.etapes .tx{flex:1;min-width:0;line-height:1.9}
+.ic{display:inline-grid;place-items:center;width:30px;height:30px;border:1.5px solid #c9cec3;border-radius:8px;background:#fff;color:var(--ink);vertical-align:middle;margin:-4px 2px 0;line-height:0}
+.ic svg{width:18px;height:18px}
+.note{margin-top:12px;padding:12px 14px;border-radius:12px;background:var(--info-bg);color:var(--info);font-size:15px;line-height:1.8}
+.note .btn{color:var(--ink)}
+.qr{display:flex;gap:16px;align-items:center}
+.qr img{width:150px;height:150px;flex:none;display:block;border-radius:8px;border:1px solid var(--line)}
+.qr p{margin:4px 0 0;color:var(--ink2);font-size:15px}
+#lien-copie{width:100%;font:inherit;font-size:15px;margin:12px 0 0;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;background:#fff;color:var(--ink)}
+.prete{animation:prete .9s ease-out 2}
+@keyframes prete{0%{box-shadow:0 0 0 0 rgba(160,200,64,.7)}100%{box-shadow:0 0 0 16px rgba(160,200,64,0)}}
+@media (prefers-reduced-motion:reduce){.prete{animation:none}}
+.foot{font-size:13px;color:var(--ink2);text-align:center;margin-top:26px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(24px + env(safe-area-inset-bottom));background:var(--brand);color:#fff;padding:10px 16px;border-radius:999px;font-size:15px;line-height:1.3;z-index:40;max-width:90vw;width:max-content;text-align:center;box-shadow:0 6px 18px rgba(0,0,0,.2)}
+</style>
+</head>
+<body>
+<header class="top">
+  <img src="logo-96.png" alt="" width="44" height="44">
+  <div>
+    <p class="t1">Diagproeco</p>
+    <p class="t2">Diagnostics immobiliers · Attignat</p>
+  </div>
+  <a class="call" href="tel:+33651138782" aria-label="Appeler Geoffrey au 06 51 13 87 82">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+    Appeler
+  </a>
+</header>
+
+<main>
+  <section class="hero">
+    <img class="app-ic" src="icon-180.png" alt="" width="88" height="88">
+    <h1>Installez l'appli Diagproeco</h1>
+    <p class="lead">Vos demandes de devis de diagnostics en une minute, depuis votre écran d'accueil. Gratuite, sans compte à créer.</p>
+  </section>
+
+  <!-- Installation en un geste (quand le navigateur le permet) -->
+  <section id="c-direct" class="bloc" hidden>
+    <button type="button" class="btn primary big" id="b-installer">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+      Installer l'appli
+    </button>
+    <p class="hint centre" id="d-texte">Un geste, et l'icône Diagproeco se met sur votre écran.</p>
+  </section>
+
+  <!-- Les gestes à faire, selon le téléphone ou l'ordinateur -->
+  <section id="c-etapes" class="card bloc" hidden aria-labelledby="e-titre">
+    <h2 class="h2" id="e-titre"></h2>
+    <ol class="etapes" id="e-liste"></ol>
+    <div class="note" id="e-note" hidden></div>
+  </section>
+
+  <!-- Page ouverte dans Messenger, Facebook… : il faut d'abord passer dans le vrai navigateur -->
+  <section id="c-appli" class="card bloc alerte" hidden aria-labelledby="a-titre">
+    <h2 class="h2" id="a-titre"></h2>
+    <p id="a-texte"></p>
+    <a class="btn primary big" id="a-ouvrir" href="./" hidden></a>
+    <p class="hint" id="a-secours" hidden></p>
+    <button type="button" class="btn wide js-copier">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>
+      Copier le lien
+    </button>
+  </section>
+
+  <!-- Installée -->
+  <section id="c-fini" class="card bloc ok" hidden>
+    <h2 class="h2">C'est fait</h2>
+    <p id="f-texte">L'icône Diagproeco est sur votre écran. Touchez-la pour demander un devis.</p>
+  </section>
+
+  <!-- Sur ordinateur : le code pour l'avoir sur le téléphone -->
+  <section id="c-qr" class="card bloc qr" hidden>
+    <img src="qr-installer.svg" alt="Code QR qui ouvre cette page sur le téléphone" width="150" height="150">
+    <div>
+      <b>Sur votre téléphone</b>
+      <p>Scannez ce code avec l'appareil photo : la page s'ouvre et vous guide.</p>
+    </div>
+  </section>
+
+  <input type="text" id="lien-copie" readonly hidden aria-label="Lien de la page à copier">
+  <a class="btn wide" id="b-sans" href="./">Ouvrir l'appli sans l'installer</a>
+  <p class="foot">Diagproeco · 423 Grande Rue, 01340 Attignat · <a href="https://diagproeco.fr">diagproeco.fr</a></p>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+/* Diagproeco - page « installer » : met l'appli de devis sur le téléphone ou l'ordinateur.
+   En un geste quand le navigateur le permet (Chrome, Edge, Samsung Internet…), sinon les gestes à faire
+   pour ce téléphone-là. Dans Messenger, Facebook, Instagram… : bouton pour passer d'abord dans Chrome ou Safari. */
+(function () {
+  'use strict';
+  var HOTE_CHEMIN = 'diagproeco.github.io/agences/installer';
+  var LIEN = 'https://' + HOTE_CHEMIN;
+  var ua = navigator.userAgent || '';
+  function $(s) { return document.querySelector(s); }
+  function q(t) { return '« ' + t + ' »'; }
+
+  var INSTALLEE = navigator.standalone === true ||
+    !!(window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
+  if (INSTALLEE) return;   // la redirection vers l'appli est déjà partie (en haut de la page)
+
+  /* ---------- quel appareil, quel navigateur ---------- */
+  var IPAD = /ipad/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  var IOS = IPAD || /iphone|ipod/i.test(ua);
+  var ANDROID = /android/i.test(ua);
+  var MOBILE = IOS || ANDROID;
+  var DEPUIS_BOUTON = /[?&]depuis=appli\b/.test(location.search);   // arrivée par notre bouton « Ouvrir dans Chrome / Safari »
+  var APPLIS = [
+    [/FB_IAB\/Orca|Orca-Android|MessengerForiOS|MessengerLite|FBAN\/Messenger/i, 'Messenger'],
+    [/Instagram/i, 'Instagram'],
+    [/FBAN|FBAV|FB_IAB|FB4A|FBIOS/i, 'Facebook'],
+    [/LinkedInApp/i, 'LinkedIn'],
+    [/Snapchat/i, 'Snapchat'],
+    [/musical_ly|Bytedance|TikTok/i, 'TikTok'],
+    [/Pinterest/i, 'Pinterest'],
+    [/Twitter/i, 'X'],
+    [/ Line\//, 'Line'],
+    [/GSA\//, 'Google']
+  ];
+  var appli = null, i;
+  for (i = 0; i < APPLIS.length; i++) { if (APPLIS[i][0].test(ua)) { appli = APPLIS[i][1]; break; } }
+  var VUE_INTEGREE = (ANDROID && /; wv\)/.test(ua)) || (IOS && !/Safari\//.test(ua));   // navigateur interne d'une appli
+  var DANS_APPLI = !DEPUIS_BOUTON && (!!appli || VUE_INTEGREE);
+  var SAMSUNG = /SamsungBrowser/i.test(ua);
+  var FIREFOX = /Firefox\/|FxiOS/i.test(ua);
+  var EDGE = /EdgA?\/|EdgiOS/i.test(ua);
+  var AUTRE_IOS = IOS && /CriOS|FxiOS|EdgiOS|OPiOS|OPT\/|Ddg\/|YaBrowser/i.test(ua);
+  var V_SAFARI = parseInt((ua.match(/Version\/(\d+)/) || [])[1], 10) || 0;
+  var CHROME_ANDROID = ANDROID && /Chrome\/\d/.test(ua) && !SAMSUNG && !EDGE &&
+    !/OPR\/|Opera|MiuiBrowser|XiaoMi|HuaweiBrowser|HeyTapBrowser|VivoBrowser|UCBrowser|YaBrowser|DuckDuckGo/i.test(ua);
+  var MAC_SAFARI = !MOBILE && /Macintosh/.test(ua) && /Safari\//.test(ua) && !/Chrome|Chromium|Edg|Firefox|OPR/i.test(ua);
+  var CHROMIUM_PC = !MOBILE && /Chrome\//.test(ua);
+
+  var cas;
+  if (DANS_APPLI) cas = 'appli';
+  else if (IOS) cas = AUTRE_IOS ? 'ios-autre' : (IPAD ? 'ipad' : (V_SAFARI >= 26 ? 'ios26' : 'ios'));
+  else if (ANDROID) cas = SAMSUNG ? 'samsung' : (FIREFOX ? 'firefox' : (CHROME_ANDROID ? 'chrome' : 'android'));
+  else cas = MAC_SAFARI ? 'mac' : (CHROMIUM_PC ? 'pc' : 'pc-autre');
+
+  /* ---------- liens pour sortir d'une appli ---------- */
+  var VERS_CHROME = 'intent://' + HOTE_CHEMIN + '?depuis=appli#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=' +
+    encodeURIComponent(LIEN + '?depuis=appli') + ';end';
+  var VERS_SAFARI = 'x-safari-https://' + HOTE_CHEMIN + '?depuis=appli';
+
+  /* ---------- petits dessins des boutons à toucher ---------- */
+  function dessin(contenu, plein) {
+    return '<svg viewBox="0 0 24 24" aria-hidden="true" ' + (plein ? 'fill="currentColor" stroke="none"' :
+      'fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"') + '>' + contenu + '</svg>';
+  }
+  var IC = {
+    menu: dessin('<circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/>', true),
+    traits: dessin('<path d="M4 7h16M4 12h16M4 17h16"/>'),
+    points: dessin('<circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/>', true),
+    partager: dessin('<path d="M8.5 9H7a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1.5"/><path d="M12 14V3"/><path d="M8.5 6.5 12 3l3.5 3.5"/>'),
+    ajouter: dessin('<rect x="4" y="4" width="16" height="16" rx="4"/><path d="M12 8v8M8 12h8"/>'),
+    boussole: dessin('<circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2.2 4.8-4.8 2.2 2.2-4.8z"/>'),
+    ecran: dessin('<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/><path d="M12 7v5M9.8 10 12 12.2 14.2 10"/>')
+  };
+  function puce(nom) { return '<span class="ic">' + IC[nom] + '</span>'; }
+  var BOUTON_CHROME = '<a class="btn wide" href="' + VERS_CHROME + '">Ouvrir dans Chrome</a>';
+  var NOTE_SAFARI = 'Pas de ' + q("Sur l'écran d'accueil") + ' ? Ouvrez d\'abord la page dans Safari : touchez ' + puce('boussole') + ' en bas à droite.';
+
+  var GESTES = {
+    chrome: {
+      titre: 'En 3 gestes dans Chrome',
+      etapes: [
+        'Touchez ' + puce('menu') + ' en haut à droite de l\'écran.',
+        'Touchez ' + q("Ajouter à l'écran d'accueil") + '. Descendez un peu dans le menu si vous ne le voyez pas.',
+        'Touchez ' + q('Installer') + '.'
+      ],
+      note: 'Vous ne trouvez pas ' + q("Ajouter à l'écran d'accueil") + ' ? La page est sans doute ouverte dans une autre appli : touchez ce bouton, puis recommencez.' + BOUTON_CHROME
+    },
+    samsung: {
+      titre: 'En 3 gestes dans Samsung Internet',
+      etapes: [
+        'Touchez ' + puce('traits') + ' en bas à droite de l\'écran.',
+        'Touchez ' + q('Ajouter page à') + '.',
+        'Choisissez ' + q("Écran d'accueil") + ', puis touchez ' + q('Ajouter') + '.'
+      ],
+      note: 'Vous préférez Chrome ? La page s\'y ouvre avec ce bouton.' + BOUTON_CHROME
+    },
+    firefox: {
+      titre: 'En 3 gestes dans Firefox',
+      etapes: [
+        'Touchez ' + puce('menu') + ', le menu de Firefox.',
+        'Touchez ' + q("Ajouter à l'écran d'accueil") + ' (ou ' + q('Installer') + ').',
+        'Touchez ' + q('Ajouter') + '.'
+      ]
+    },
+    android: {
+      titre: 'En 3 gestes',
+      etapes: [
+        'Ouvrez le menu de votre navigateur : ' + puce('menu') + ' ou ' + puce('traits') + '.',
+        'Touchez ' + q("Ajouter à l'écran d'accueil") + ' (ou ' + q('Installer') + ').',
+        'Confirmez.'
+      ],
+      note: 'Vous ne trouvez pas ? Ouvrez la page dans Chrome avec ce bouton, puis recommencez.' + BOUTON_CHROME
+    },
+    ios26: {
+      titre: 'En 4 gestes dans Safari',
+      etapes: [
+        'Touchez ' + puce('points') + ' à droite de l\'adresse, en bas de l\'écran.',
+        'Touchez ' + puce('partager') + ' ' + q('Partager') + '.',
+        'Descendez et touchez ' + puce('ajouter') + ' ' + q("Sur l'écran d'accueil") + '.',
+        'Touchez ' + q('Ajouter') + ', en haut à droite.'
+      ],
+      note: NOTE_SAFARI
+    },
+    ios: {
+      titre: 'En 3 gestes dans Safari',
+      etapes: [
+        'Touchez ' + puce('partager') + ' ' + q('Partager') + ', en bas de l\'écran.',
+        'Descendez et touchez ' + puce('ajouter') + ' ' + q("Sur l'écran d'accueil") + '.',
+        'Touchez ' + q('Ajouter') + ', en haut à droite.'
+      ],
+      note: NOTE_SAFARI
+    },
+    ipad: {
+      titre: 'En 3 gestes dans Safari',
+      etapes: [
+        'Touchez ' + puce('partager') + ' ' + q('Partager') + ' en haut de l\'écran (ou ' + puce('points') + ', puis ' + q('Partager') + ').',
+        'Touchez ' + puce('ajouter') + ' ' + q("Sur l'écran d'accueil") + '.',
+        'Touchez ' + q('Ajouter') + '.'
+      ],
+      note: NOTE_SAFARI
+    },
+    mac: {
+      titre: 'Sur ce Mac',
+      etapes: [
+        'Dans le menu ' + q('Fichier') + ', en haut de l\'écran, choisissez ' + q('Ajouter au Dock') + '.',
+        'Cliquez sur ' + q('Ajouter') + '.'
+      ]
+    },
+    pc: {
+      titre: 'Sur cet ordinateur',
+      etapes: [
+        'Cliquez sur ' + puce('ecran') + ' à droite de la barre d\'adresse.',
+        'Cliquez sur ' + q('Installer') + '.'
+      ],
+      note: 'Pas d\'icône ? Ouvrez le menu du navigateur (' + puce('menu') + ' ou ' + puce('points') + ') et cherchez ' + q('Installer') + '.'
+    }
+  };
+
+  /* ---------- affichage ---------- */
+  var etat = null, invite = null;
+  function montrer(e) {
+    etat = e;
+    ['direct', 'etapes', 'appli', 'fini'].forEach(function (k) { $('#c-' + k).hidden = (k !== e); });
+  }
+  function remplirGestes(g) {
+    $('#e-titre').textContent = g.titre;
+    $('#e-liste').innerHTML = g.etapes.map(function (t) { return '<li><span class="tx">' + t + '</span></li>'; }).join('');
+    $('#e-note').innerHTML = g.note || '';
+    $('#e-note').hidden = !g.note;
+  }
+  function remplirSortie() {
+    var ou = appli ? 'l\'appli ' + appli : 'une autre appli';
+    var titre, texte, bouton = null, lien = null, secours = '';
+    if (cas === 'appli' && IOS) {
+      titre = 'Ouvrez d\'abord la page dans Safari';
+      texte = 'Elle est ouverte dans ' + ou + ', qui ne permet pas d\'installer d\'appli.';
+      bouton = 'Ouvrir dans Safari'; lien = VERS_SAFARI;
+      secours = 'Rien ne se passe ? Touchez ' + puce('points') + ' ou ' + puce('partager') + ', puis ' + q('Ouvrir dans Safari') + ' (ou ' + q('Ouvrir dans le navigateur') + ').';
+    } else if (cas === 'appli') {
+      titre = 'Ouvrez d\'abord la page dans Chrome';
+      texte = 'Elle est ouverte dans ' + ou + ', qui ne permet pas d\'installer d\'appli.';
+      bouton = 'Ouvrir dans Chrome'; lien = VERS_CHROME;
+      secours = 'Rien ne se passe ? Touchez ' + puce('menu') + ' en haut à droite, puis ' + q('Ouvrir dans Chrome') + ' (ou ' + q('Ouvrir dans le navigateur') + ').';
+    } else if (cas === 'ios-autre') {
+      titre = 'Sur iPhone, l\'installation se fait dans Safari';
+      texte = 'Ouvrez cette page dans Safari, puis suivez les gestes indiqués.';
+      bouton = 'Ouvrir dans Safari'; lien = VERS_SAFARI;
+      secours = 'Rien ne se passe ? Copiez le lien, ouvrez Safari et collez-le dans la barre d\'adresse.';
+    } else {   // ordinateur avec un navigateur qui n'installe pas d'appli (Firefox…)
+      titre = 'Ce navigateur n\'installe pas d\'appli';
+      texte = 'Ouvrez ce lien dans Chrome ou Edge pour installer l\'appli sur cet ordinateur.';
+    }
+    $('#a-titre').textContent = titre;
+    $('#a-texte').textContent = texte;
+    $('#a-ouvrir').hidden = !bouton;
+    if (bouton) { $('#a-ouvrir').textContent = bouton; $('#a-ouvrir').href = lien; }
+    $('#a-secours').innerHTML = secours;
+    $('#a-secours').hidden = !secours;
+  }
+  function afficherGestes() {
+    if (GESTES[cas]) { remplirGestes(GESTES[cas]); montrer('etapes'); }
+    else { remplirSortie(); montrer('appli'); }
+  }
+
+  /* ---------- installation en un geste ---------- */
+  window.addEventListener('beforeinstallprompt', function (e) {
+    e.preventDefault(); invite = e;
+    if (etat === 'fini') return;
+    var avant = etat;
+    montrer('direct');
+    if (avant) { var b = $('#b-installer'); b.classList.remove('prete'); void b.offsetWidth; b.classList.add('prete'); }   // le bouton arrive pendant la lecture des gestes : on le signale
+  });
+  window.addEventListener('appinstalled', function () {
+    invite = null; montrer('fini');
+    $('#b-sans').textContent = 'Ouvrir l\'appli';
+  });
+  $('#b-installer').addEventListener('click', function () {
+    if (!invite) { afficherGestes(); return; }
+    var ev = invite; invite = null;
+    ev.prompt();
+    ev.userChoice.then(function (r) {
+      if (r && r.outcome === 'accepted') { montrer('fini'); $('#b-sans').textContent = 'Ouvrir l\'appli'; }
+      else afficherGestes();
+    }, afficherGestes);
+  });
+
+  /* ---------- copier le lien ---------- */
+  var tToast = null;
+  function toast(m) {
+    var t = $('#toast'); t.textContent = m; t.hidden = false;
+    clearTimeout(tToast); tToast = setTimeout(function () { t.hidden = true; }, 3500);
+  }
+  function montrerLien() {
+    var c = $('#lien-copie'); c.value = LIEN; c.hidden = false; c.focus(); c.select();
+    toast('Restez appuyé sur le lien pour le copier.');
+  }
+  function copier() {
+    if (navigator.clipboard && navigator.clipboard.writeText && window.isSecureContext) {
+      navigator.clipboard.writeText(LIEN).then(function () { toast('Lien copié.'); }, montrerLien);
+    } else montrerLien();
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('.js-copier'), function (b) { b.addEventListener('click', copier); });
+
+  /* ---------- départ ---------- */
+  if (!MOBILE) {
+    $('#c-qr').hidden = false;
+    $('#d-texte').textContent = 'Elle s\'ouvrira ensuite dans sa propre fenêtre, comme un logiciel.';
+    $('#f-texte').textContent = 'L\'appli Diagproeco est installée sur cet ordinateur : elle s\'ouvre comme un logiciel.';
+  }
+  if (!DANS_APPLI && 'onbeforeinstallprompt' in window) {
+    // Le navigateur sait installer en un geste : on lui laisse un instant avant de montrer les gestes à la main
+    setTimeout(function () { if (etat === null) afficherGestes(); }, 900);
+  } else afficherGestes();
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () { /* rien */ }); });
+  }
+})();
+</script>
+</body>
+</html>
